@@ -1,0 +1,3254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<keywordspec name="Browser" type="LIBRARY" format="ROBOT" scope="GLOBAL" namedargs="true" generated="2021-06-03T16:29:22Z" specversion="2" source="C:\Python\Lib\site-packages\Browser\__init__.py" lineno="58">
+<version>4.5.2</version>
+<scope>global</scope>
+<namedargs>yes</namedargs>
+<doc>Browser library is a browser automation library for Robot Framework.
+
+This is the keyword documentation for Browser library. For information
+about installation, support, and more please visit the
+[https://github.com/MarketSquare/robotframework-playwright|project pages].
+For more information about Robot Framework itself, see [https://robotframework.org|robotframework.org].
+
+Browser library uses
+[https://github.com/microsoft/playwright|Playwright Node module]
+to automate [https://www.chromium.org/Home|Chromium],
+[https://www.mozilla.org/en-US/firefox/new/|Firefox]
+and [https://webkit.org/|WebKit] with a single library.
+
+
+== Table of contents ==
+
+- `Browser, Context and Page`
+- `Finding elements`
+- `Assertions`
+- `Automatic page and context closing`
+- `Experimental: Re-using same node process`
+- `Extending Browser library with a JavaScript module`
+- `Importing`
+- `Shortcuts`
+- `Tags`
+- `Keywords`
+
+= Browser, Context and Page =
+
+Browser library works with three different layers that build on each other:
+*Browser*, *Context* and *Page*.
+
+
+== Browsers ==
+
+A *browser* can be started with one of the three
+different engines Chromium, Firefox or Webkit.
+
+=== Supported Browsers ===
+
+|   Browser     | Browser with this engine                          |
+| ``chromium``  | Google Chrome, Microsoft Edge (since 2020), Opera |
+| ``firefox``   | Mozilla Firefox                                   |
+| ``webkit``    | Apple Safari, Mail, AppStore on MacOS and iOS     |
+
+Since [https://github.com/microsoft/playwright|Playwright] comes with a pack of builtin
+binaries for all browsers, no additional drivers e.g. geckodriver are needed.
+
+All these browsers that cover more than 85% of the world wide used browsers,
+can be tested on Windows, Linux and MacOS.
+Theres is not need for dedicated machines anymore.
+
+A browser process is started ``headless`` (without a GUI) by default.
+Run `New Browser` with specified arguments if a browser with a GUI is requested
+or if a proxy has to be configured.
+A browser process can contain several contexts.
+
+
+== Contexts ==
+
+A *context* corresponds to set of independent incognito pages in a browser
+that share cookies, sessions or profile settings. Pages in two separate
+contexts do not share cookies, sessions or profile settings.
+Compared to Selenium, these do *not* require their own browser process.
+To get a clean environment a test can just open a new context.
+Due to this new independent browser sessions can be opened with
+Robot Framework Browser about 10 times faster than with Selenium by
+just opening a `New Context` within the opened browser.
+
+The context layer is useful e.g. for testing different users sessions on the
+same webpage without opening a whole new browser context.
+Contexts can also have detailed configurations, such as geo-location, language settings,
+the viewport size or color scheme.
+Contexts do also support http credentials to be set, so that basic authentication
+can also be tested. To be able to download files within the test,
+the ``acceptDownloads`` argument must be set to ``True`` in `New Context` keyword.
+A context can contain different pages.
+
+
+== Pages ==
+
+A *page* does contain the content of the loaded web site and has a browsing history.
+Pages and browser tabs are the same.
+
+Typical usage could be:
+| *** Test Cases ***
+| Starting a browser with a page
+|     New Browser    chromium    headless=false
+|     New Context    viewport={'width': 1920, 'height': 1080}
+|     New Page       https://marketsquare.github.io/robotframework-browser/Browser.html
+|     Get Title      ==    Browser
+
+The `Open Browser` keyword opens a new browser, a new context and a new page.
+This keyword is useful for quick experiments or debugging sessions.
+
+When a `New Page` is called without an open browser, `New Browser`
+and `New Context` are executed with default values first.
+
+Each Browser, Context and Page has a unique ID with which they can be addressed.
+A full catalog of what is open can be received by `Get Browser Catalog` as dictionary.
+
+= Finding elements =
+
+All keywords in the library that need to interact with an element
+on a web page take an argument typically named ``selector`` that specifies
+how to find the element.
+
+Selector strategies that are supported by default are listed in the table
+below.
+
+| = Strategy = |     = Match based on =     |         = Example =                |
+| ``css``      | CSS selector.              | ``css=.class &gt; #login_btn``        |
+| ``xpath``    | XPath expression.          | ``xpath=//input[@id="login_btn"]`` |
+| ``text``     | Browser text engine.       | ``text=Login``                     |
+| ``id``       | Element ID Attribute.      | ``id=login_btn``                   |
+
+
+== Explicit Selector Strategy ==
+
+The explicit selector strategy is specified with a prefix using syntax
+``strategy=value``. Spaces around the separator are ignored, so
+``css=foo``, ``css= foo`` and ``css = foo`` are all equivalent.
+
+
+== Implicit Selector Strategy ==
+
+*The default selector strategy is `css`.*
+
+If selector does not contain one of the know explicit selector strategies, it is
+assumed to contain css selector.
+
+Selectors that are starting with ``//`` or ``..`` are considered as xpath selectors.
+
+Selectors that are in quotes are considered as text selectors.
+
+Examples:
+
+| # CSS selectors are default.
+| `Click`  span &gt; button.some_class         # This is equivalent
+| `Click`  css=span &gt; button.some_class     # to this.
+|
+| # // or .. leads to xpath selector strategy
+| `Click`  //span/button[@class="some_class"]
+| `Click`  xpath=//span/button[@class="some_class"]
+|
+| # "text" in quotes leads to exact text selector strategy
+| `Click`  "Login"
+| `Click`  text="Login"
+
+
+== CSS ==
+
+As written before, the default selector strategy is `css`. See
+[https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors | css selector]
+for more information.
+
+Any malformed selector not starting with ``//`` or ``..`` nor starting and ending
+with a quote is assumed to be a css selector.
+
+Example:
+| `Click`  span &gt; button.some_class
+
+
+== XPath ==
+
+XPath engine is equivalent to [https://developer.mozilla.org/en/docs/Web/API/Document/evaluate|Document.evaluate].
+Example: ``xpath=//html/body//span[text()="Hello World"]``.
+
+Malformed selector starting with ``//`` or ``..`` is assumed to be an xpath selector.
+For example, ``//html/body`` is converted to ``xpath=//html/body``. More
+examples are displayed in `Examples`.
+
+Note that xpath does not pierce [https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM|shadow_roots].
+
+
+== Text ==
+
+Text engine finds an element that contains a text node with the passed text.
+For example, ``Click    text=Login`` clicks on a login button, and
+``Wait For Elements State   text="lazy loaded text"`` waits for the "lazy loaded text"
+to appear in the page.
+
+Text engine finds fields based on their labels in text inserting keywords.
+
+Malformed selector starting and ending with a quote (either ``"`` or ``'``) is assumed
+to be a text selector. For example, ``Click    "Login"`` is converted to ``Click    text="Login"``.
+Be aware that these leads to exact matches only!
+More examples are displayed in `Examples`.
+
+
+=== Insensitive match ===
+
+By default, the match is case-insensitive, ignores leading/trailing whitespace and
+searches for a substring. This means ``text= Login`` matches
+``&lt;button&gt;Button loGIN (click me)&lt;/button&gt;``.
+
+=== Exact match ===
+
+Text body can be escaped with single or double quotes for precise matching,
+insisting on exact match, including specified whitespace and case.
+This means ``text="Login "`` will only match ``&lt;button&gt;Login &lt;/button&gt;`` with exactly
+one space after "Login". Quoted text follows the usual escaping rules, e.g.
+use ``\"`` to escape double quote in a double-quoted string: ``text="foo\"bar"``.
+
+=== RegEx ===
+
+Text body can also be a JavaScript-like regex wrapped in / symbols.
+This means ``text=/^hello .*!$/i`` or ``text=/^Hello .*!$/`` will match ``&lt;span&gt;Hello Peter Parker!&lt;/span&gt;``
+with any name after ``Hello``, ending with ``!``.
+The first one flagged with ``i`` for case-insensitive.
+See [https://regex101.com/|https://regex101.com] for more information about RegEx.
+
+=== Button and Submit Values ===
+
+Input elements of the type button and submit are rendered with their value as text,
+and text engine finds them. For example, ``text=Login`` matches
+``&lt;input type=button value="Login"&gt;``.
+
+== Cascaded selector syntax ==
+
+Browser library supports the same selector strategies as the underlying
+Playwright node module: xpath, css, id and text. The strategy can either
+be explicitly specified with a prefix or the strategy can be implicit.
+
+A major advantage of Browser is, that multiple selector engines can be used
+within one selector. It is possible to mix XPath, CSS and Text selectors while
+selecting a single element.
+
+Selectors are strings that consists of one or more clauses separated by
+``&gt;&gt;`` token, e.g. ``clause1 &gt;&gt; clause2 &gt;&gt; clause3``. When multiple clauses
+are present, next one is queried relative to the previous one's result.
+Browser library supports concatination of different selectors seperated by ``&gt;&gt;``.
+
+For example:
+| `Highlight Elements`    "Hello" &gt;&gt; ../.. &gt;&gt; .select_button
+| `Highlight Elements`    text=Hello &gt;&gt; xpath=../.. &gt;&gt; css=.select_button
+
+Each clause contains a selector engine name and selector body, e.g.
+``engine=body``. Here ``engine`` is one of the supported engines (e.g. css or
+a custom one). Selector ``body`` follows the format of the particular engine,
+e.g. for css engine it should be a [https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors | css selector].
+Body format is assumed to ignore leading and trailing white spaces,
+so that extra whitespace can be added for readability. If selector
+engine needs to include ``&gt;&gt;`` in the body, it should be escaped
+inside a string to not be confused with clause separator,
+e.g. ``text="some &gt;&gt; text"``.
+
+Selector engine name can be prefixed with ``*`` to capture element that
+matches the particular clause instead of the last one. For example,
+``css=article &gt;&gt; text=Hello`` captures the element with the text ``Hello``,
+and ``*css=article &gt;&gt; text=Hello`` (note the *) captures the article element
+that contains some element with the text Hello.
+
+For convenience, selectors in the wrong format are heuristically converted
+to the right format. See `Implicit Selector Strategy`
+
+== Examples ==
+| # queries 'div' css selector
+| Get Element    css=div
+|
+| # queries '//html/body/div' xpath selector
+| Get Element    //html/body/div
+|
+| # queries '"foo"' text selector
+| Get Element    text=foo
+|
+| # queries 'span' css selector inside the result of '//html/body/div' xpath selector
+| Get Element    xpath=//html/body/div &gt;&gt; css=span
+|
+| # converted to 'css=div'
+| Get Element    div
+|
+| # converted to 'xpath=//html/body/div'
+| Get Element    //html/body/div
+|
+| # converted to 'text="foo"'
+| Get Element    "foo"
+|
+| # queries the div element of every 2nd span element inside an element with the id foo
+| Get Element    \#foo &gt;&gt; css=span:nth-child(2n+1) &gt;&gt; div
+| Get Element    id=foo &gt;&gt; css=span:nth-child(2n+1) &gt;&gt; div
+
+Be aware that using ``#`` as a starting character in Robot Framework would be interpreted as comment.
+Due to that fact a ``#id`` must be escaped as ``\#id``.
+
+== Frames ==
+
+By default, selector chains do not cross frame boundaries. It means that a
+simple CSS selector is not able to select and element located inside an iframe
+or a frameset. For this usecase, there is a special selector ``&gt;&gt;&gt;`` which can
+be used to combine a selector for the frame and a selector for an element
+inside a frame.
+
+Given this simple pseudo html snippet:
+| &lt;iframe id="iframe" src="src.html"&gt;
+|   #document
+|     &lt;!DOCTYPE html&gt;
+|     &lt;html&gt;
+|       &lt;head&gt;&lt;/head&gt;
+|       &lt;body&gt;
+|         &lt;button id="btn"&gt;Click Me&lt;/button&gt;
+|       &lt;/body&gt;
+|     &lt;/html&gt;
+| &lt;/iframe&gt;
+
+Here's a keyword call that clicks the button inside the frame.
+
+| Click   id=iframe &gt;&gt;&gt; id=btn
+
+The selectors on the left and right side of ``&gt;&gt;&gt;`` can be any valid selectors.
+The selector clause directly before the frame opener ``&gt;&gt;&gt;`` must select the frame element.
+
+== WebComponents and Shadow DOM ==
+
+Playwright and so also Browser are able to do automatic piercing of Shadow DOMs
+and therefore are the best automation technology when working with WebComponents.
+
+Also other technologies claim that they can handle
+[https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM|Shadow DOM and Web Components].
+However, non of them do pierce shadow roots automatically,
+which may be inconvenient when working with Shadow DOM and Web Components.
+
+For that reason, css engine pierces shadow roots. More specifically, every
+[https://developer.mozilla.org/en-US/docs/Web/CSS/Descendant_combinator|Descendant combinator]
+pierces an arbitrary number of open shadow roots, including the implicit descendant combinator
+at the start of the selector.
+
+That means, it is not nessesary to select each shadow host, open its shadow root and
+select the next shadow host until you reach the element that should be controlled.
+
+=== CSS:light ===
+
+``css:light`` engine is equivalent to [https://developer.mozilla.org/en/docs/Web/API/Document/querySelector | Document.querySelector]
+and behaves according to the CSS spec.
+However, it does not pierce shadow roots.
+
+``css`` engine first searches for elements in the light dom in the iteration order,
+and then recursively inside open shadow roots in the iteration order. It does not
+search inside closed shadow roots or iframes.
+
+Examples:
+
+| &lt;article&gt;
+|   &lt;div&gt;In the light dom&lt;/div&gt;
+|   &lt;div slot='myslot'&gt;In the light dom, but goes into the shadow slot&lt;/div&gt;
+|   &lt;open mode shadow root&gt;
+|       &lt;div class='in-the-shadow'&gt;
+|           &lt;span class='content'&gt;
+|               In the shadow dom
+|               &lt;open mode shadow root&gt;
+|                   &lt;li id='target'&gt;Deep in the shadow&lt;/li&gt;
+|               &lt;/open mode shadow root&gt;
+|           &lt;/span&gt;
+|       &lt;/div&gt;
+|       &lt;slot name='myslot'&gt;&lt;/slot&gt;
+|   &lt;/open mode shadow root&gt;
+| &lt;/article&gt;
+
+Note that ``&lt;open mode shadow root&gt;`` is not an html element, but rather a shadow root
+created with ``element.attachShadow({mode: 'open'})``.
+
+- Both ``"css=article div"`` and ``"css:light=article div"`` match the first ``&lt;div&gt;In the light dom&lt;/div&gt;``.
+- Both ``"css=article &gt; div"`` and ``"css:light=article &gt; div"`` match two ``div`` elements that are direct children of the ``article``.
+- ``"css=article .in-the-shadow"`` matches the ``&lt;div class='in-the-shadow'&gt;``, piercing the shadow root, while ``"css:light=article .in-the-shadow"`` does not match anything.
+- ``"css:light=article div &gt; span"`` does not match anything, because both light-dom ``div`` elements do not contain a ``span``.
+- ``"css=article div &gt; span"`` matches the ``&lt;span class='content'&gt;``, piercing the shadow root.
+- ``"css=article &gt; .in-the-shadow"`` does not match anything, because ``&lt;div class='in-the-shadow'&gt;`` is not a direct child of ``article``
+- ``"css:light=article &gt; .in-the-shadow"`` does not match anything.
+- ``"css=article li#target"`` matches the ``&lt;li id='target'&gt;Deep in the shadow&lt;/li&gt;``, piercing two shadow roots.
+
+=== text:light ===
+
+``text`` engine open pierces shadow roots similarly to ``css``, while ``text:light`` does not.
+Text engine first searches for elements in the light dom in the iteration order, and then
+recursively inside open shadow roots in the iteration order. It does not search inside
+closed shadow roots or iframes.
+
+=== id, data-testid, data-test-id, data-test and their :light counterparts ===
+
+Attribute engines are selecting based on the corresponding attribute value.
+For example: ``data-test-id=foo`` is equivalent to ``css=[data-test-id="foo"]``,
+and ``id:light=foo`` is equivalent to ``css:light=[id="foo"]``.
+
+== Element reference syntax ==
+
+It is possible to get a reference to an element by using `Get Element` keyword. This
+reference can be used as a *first* part of a selector by using a special selector
+syntax `element=` like this:
+
+| ${ref}=    Get Element    .some_class
+|            Click          element=${ref} &gt;&gt; .some_child
+
+The `.some_child` selector in the example is relative to the element referenced by ${ref}.
+
+= Assertions =
+
+Keywords that accept arguments ``assertion_operator`` &lt;`AssertionOperator`&gt; and ``assertion_expected``
+can optionally assert.
+
+    Currently supported assertion operators are:
+
+    |      = Operator =   |   = Alternative Operators =       |              = Description =                                                       | = Validate Equivalent =              |
+    | ``==``              | ``equal``, ``should be``          | Checks if returned value is equal to expected value.                               | ``value == expected``                |
+    | ``!=``              | ``inequal``, ``should not be``    | Checks if returned value is not equal to expected value.                           | ``value != expected``                |
+    | ``&gt;``               | ``greater than``                  | Checks if returned value is greater than expected value.                           | ``value &gt; expected``                 |
+    | ``&gt;=``              |                                   | Checks if returned value is greater than or equal to expected value.               | ``value &gt;= expected``                |
+    | ``&lt;``               | ``less than``                     | Checks if returned value is less than expected value.                              | ``value &lt; expected``                 |
+    | ``&lt;=``              |                                   | Checks if returned value is less than or equal to expected value.                  | ``value &lt;= expected``                |
+    | ``*=``              | ``contains``                      | Checks if returned value contains expected value as substring.                     | ``expected in value``                |
+    |                     | ``not contains``                  | Checks if returned value does not contain expected value as substring.             | ``expected in value``                |
+    | ``^=``              | ``should start with``, ``starts`` | Checks if returned value starts with expected value.                               | ``re.search(f"^{expected}", value)`` |
+    | ``$=``              | ``should end with``, ``ends``     | Checks if returned value ends with expected value.                                 | ``re.search(f"{expected}$", value)`` |
+    | ``matches``         |                                   | Checks if given RegEx matches minimum once in returned value.                      | ``re.search(expected, value)``       |
+    | ``validate``        |                                   | Checks if given Python expression evaluates to ``True``.                           |                                      |
+    | ``evaluate``        |  ``then``                         | When using this operator, the keyword does return the evaluated Python expression. |                        |
+    
+
+But default the keywords will provide an error message if the assertion fails,
+but default error message can be overwritten with a ``message`` argument. The
+``message`` argument accepts `{value}`, `{value_type}`, `{expected}` and
+`{expected_type}` [https://docs.python.org/3/library/stdtypes.html#str.format|format]
+options. The `{value}` is the value returned by the keyword and the `{expected}`
+is the expected value defined by the user, usually value in the
+``assertion_expected`` argument. The `{value_type}` and
+`{expected_type}` are the type definitions from `{value}` and `{expected}`
+arguments. In similar fashion as Python
+[https://docs.python.org/3/library/functions.html#type|type] returns type definition.
+Assertions will retry until ``timeout`` has expired if they do not pass.
+
+The assertion ``assertion_expected`` value is not converted by the library and
+is used as is. Therefore when assertion is made, the ``assertion_expected``
+argument value and value returned the keyword must have same type. If types
+are not same, assertion will fail. Example `Get Text` always returns a string
+and has to be compared with a string, even the returnd value might look like
+a number.
+
+Other Keywords have other specific types they return.
+`Get Element Count` always returns an integer.
+`Get Bounding Box` and `Get Viewport Size` can be filtered.
+They return a dictionary without filter and a number when filtered.
+These Keywords do autoconvert the expected value if a number is returned.
+
+* &lt; less or greater &gt; With Strings*
+Compairisons of strings with ``greater than`` or ``less than`` compares each character,
+starting from 0 reagarding where it stands in the code page.
+Example: ``A &lt; Z``, ``Z &lt; a``, ``ac &lt; dc`
+It does never compare the length of elements. Neither lists nor strings.
+The comparison stops at the first character that is different.
+Examples: ``'abcde' &lt; 'abd'``, ``'100.000' &lt; '2'``
+In Python 3 and therefore also in Browser it is not possible to compare numbers
+with strings with a greater or less operator.
+On keywords that return numbers, the given expected value is automatically
+converted to a number before comparison.
+
+
+The getters `Get Page State` and `Get Browser Catalog` return a dictionary. Values of the dictionary can directly asserted.
+Pay attention of possible types because they are evaluated in Python. For example:
+
+| Get Page State    validate    2020 &gt;= value['year']                     # Compairsion of numbers
+| Get Page State    validate    "IMPORTANT MESSAGE!" == value['message']  # Compairsion of strings
+
+== The 'then' or 'evaluate' closure ==
+
+Keywords that accept arguments ``assertion_operator`` and ``assertion_expected``
+can optionally also use ``then`` or ``evaluate`` closure to modify the returned value with
+BuiltIn Evaluate. Actual value can be accessed with ``value``.
+
+For example ``Get Title  then  'TITLE: '+value``.
+See
+[https://robotframework.org/robotframework/latest/libraries/BuiltIn.html#Evaluating%20expressions|
+Builtin Evaluating expressions]
+for more info on the syntax.
+
+== Examples ==
+
+| # *Keyword*    *Selector*                    *Key*        *Assertion Operator*    *Assertion Expected*
+| Get Title                                           equal                 Page Title
+| Get Title                                           ^=                    Page
+| Get Style    //*[@id="div-element"]      width      &gt;                     100
+| Get Title                                           matches               \\w+\\s\\w+
+| Get Title                                           validate              value == "Login Page"
+| Get Title                                           evaluate              value if value == "some value" else "something else"
+
+= Automatic page and context closing =
+
+Controls when contexts and pages are closed during the test execution.
+
+    If automatic closing level is `TEST`, contexts and pages that are created during a single test are
+    automatically closed when the test ends. Contexts and pages that are created during suite setup are
+    closed when the suite teardown ends.
+
+    If automatic closing level is `SUITE`, all contexts and pages that are created during the test suite
+     are closed when the suite teardown ends.
+
+    If automatic closing level is `MANUAL`, nothing is closed automatically during the test execution
+    is ongoing.
+
+    All browsers are automatically closed, always and regardless of the automatic closing level at
+    the end of the test execution. This will also close all remaining pages and contexts.
+
+    Automatic closing can be configured or switched off with the auto_closing_level library import
+    parameter.
+
+    See: `Importing`
+
+= Experimental: Re-using same node process =
+
+Browser library integrated nodejs and python. NodeJS side can be also executed as a standalone process.
+Browser libraries running on the same machine can talk to that instead of starting new node processes.
+This can speed execution when running tests parallel.
+To start node side run on the directory when Browser package is
+``PLAYWRIGHT_BROWSERS_PATH=0 node Browser/wrapper/index.js PORT``.
+``PORT`` is port you want to use for the node process.
+To execute tests then with pabot for example do ``ROBOT_FRAMEWORK_BROWSER_NODE_PORT=PORT pabot ..``.
+
+= Extending Browser library with a JavaScript module =
+
+Browser library can be extended with JavaScript. Module must be in CommonJS format that Node.js uses.
+You can translate your ES6 module to Node.js CommonJS style with Babel. Many other languages
+can be also translated to modules that can be used from Node.js. For example TypeScript, PureScript and
+ClojureScript just to mention few.
+
+| async function myGoToKeyword(page, args, logger, playwright) {
+|   logger(args.toString())
+|   playwright.coolNewFeature()
+|   return await page.goto(args[0]);
+| }
+
+``page``: [https://playwright.dev/docs/api/class-page|the playwright Page object].
+
+``args``: list of strings from Robot Framework keyword call.
+
+!! A BIT UNSTABLE AND SUBJECT TO API CHANGES !!
+``logger``: callback function that takes strings as arguments and writes them to robot log. Can be called multiple times.
+
+``playwright``: playwright module (* from 'playwright'). Useful for integrating with Playwright features that Browser library doesn't support with it's own keywords. [https://playwright.dev/docs/api/class-playwright| API docs]
+
+== Example module.js ==
+
+| async function myGoToKeyword(page, args) {
+|   await page.goto(args[0]);
+|   return await page.title();
+| }
+| exports.__esModule = true;
+| exports.myGoToKeyword = myGoToKeyword;
+
+== Example Robot Framework side ==
+
+| *** Settings ***
+| Library   Browser  jsextension=${CURDIR}/module.js
+|
+| *** Test Cases ***
+| Hello
+|   New Page
+|   ${title}=  myGoToKeyword  https://playwright.dev
+|   Should be equal  ${title}  Playwright
+
+Also selector syntax can be extended withm custom selector with a js module
+
+== Example module keyword for custom selector registerin ==
+
+| async function registerMySelector(page, args, log, playwright) {
+| playwright.selectors.register("myselector", () =&gt; ({
+|    // Returns the first element matching given selector in the root's subtree.
+|    query(root, selector) {
+|       return root.querySelector(`a[data-title="${selector}"]`);
+|     },
+|
+|     // Returns all elements matching given selector in the root's subtree.
+|     queryAll(root, selector) {
+|       return Array.from(root.querySelectorAll(`a[data-title="${selector}"]`));
+|     }
+| }));
+| return 1;
+| }
+| exports.__esModule = true;
+| exports.registerMySelector = registerMySelector;</doc>
+<init source="..\..\..\..\..\Python\Lib\site-packages\Browser\browser.py" lineno="602">
+<arguments>
+<arg>timeout: timedelta = 0:00:10</arg>
+<arg>enable_playwright_debug: bool = False</arg>
+<arg>auto_closing_level: AutoClosingLevel { SUITE | TEST | MANUAL } = AutoClosingLevel.TEST</arg>
+<arg>retry_assertions_for: timedelta = 0:00:01</arg>
+<arg>run_on_failure: str = Take Screenshot</arg>
+<arg>external_browser_executable: typing.Dict[Browser.utils.data_types.SupportedBrowsers, str] = None</arg>
+<arg>jsextension: str = None</arg>
+<arg>enable_presenter_mode: bool = False</arg>
+</arguments>
+<doc>Browser library can be taken into use with optional arguments:
+
+- ``timeout`` &lt;str&gt;
+  Timeout for keywords that operate on elements. The keywords will wait
+  for this time for the element to appear into the page. Defaults to "10s" =&gt; 10 seconds.
+- ``enable_playwright_debug`` &lt;bool&gt;
+  Enable low level debug information from the playwright tool. Mainly
+  Useful for the library developers and for debugging purposes.
+- ``auto_closing_level`` &lt; ``TEST`` | ``SUITE`` | ``MANUAL`` &gt;
+  Configure context and page automatic closing. Default is ``TEST``,
+  for more details, see `AutoClosingLevel`
+- ``retry_assertions_for`` &lt;str&gt;
+  Timeout for retrying assertions on keywords before failing the keywords.
+  This timeout starts counting from the first failure.
+  Global ``timeout`` will still be in effect.
+  This allows stopping execution faster to assertion failure when element is found fast.
+- ``run_on_failure`` &lt;str&gt;
+  Sets the keyword to execute in case of a failing Browser keyword.
+  It can be the name of any keyword that does not have any mandatory argument.
+  If no extra action should be done after a failure, set it to ``None`` or any other robot falsy value.
+- ``external_browser_executable`` &lt;Dict &lt;SupportedBrowsers, Path&gt;&gt;
+  Dict mapping name of browser to path of executable of a browser.
+  Will make opening new browsers of the given type use the set executablePath.
+  Currently only configuring of `chromium` to a separate executable (chrome,
+  chromium and Edge executables all work with recent versions) works.
+- ``jsextension`` &lt;str&gt;
+  Path to Javascript module exposed as extra keywords. Module must be in CommonJS.
+- ``enable_presenter_mode`` &lt;bool&gt;
+  Automatic highlights to interacted components, slowMo and a small pause at the end.</doc>
+</init>
+<kw name="Add Cookie" source="C:\Python\Lib\site-packages\Browser\keywords\cookie.py" lineno="90">
+<arguments>
+<arg>name: str</arg>
+<arg>value: str</arg>
+<arg>url: str = None</arg>
+<arg>domain: str = None</arg>
+<arg>path: str = None</arg>
+<arg>expires: str = None</arg>
+<arg>httpOnly: bool = None</arg>
+<arg>secure: bool = None</arg>
+<arg>sameSite: CookieSameSite { Strict | Lax | None } = None</arg>
+</arguments>
+<doc>Adds a cookie to currently active browser context.
+
+``name`` Name of the cookie.
+
+``value`` Given value for the cookie.
+
+``url`` Given url for the cookie. Defaults to None. Either ``url`` or ``domain`` / ``path`` pair must be set.
+
+``domain`` Given domain for the cookie. Defaults to None. Either ``url`` or ``domain`` / ``path`` pair must be set.
+
+``path`` Given path for the cookie. Defaults to None. Either ``url`` or ``domain`` / ``path`` pair must be set.
+
+``expires`` Given expiry for the cookie. Can be of date format or unix time. Supports
+the same formats as the [http://robotframework.org/robotframework/latest/libraries/DateTime.html|DateTime]
+library or an epoch timestamp.
+- example: 2027-09-28 16:21:35
+
+``httpOnly`` Sets the httpOnly token.
+
+``secure`` Sets the secure token.
+
+``samesite`` Sets the samesite mode.
+
+Example:
+| `Add Cookie`   foo   bar   http://address.com/path/to/site                                     # Using url argument.
+| `Add Cookie`   foo   bar   domain=example.com                path=/foo/bar                     # Using domain and url arguments.
+| `Add Cookie`   foo   bar   http://address.com/path/to/site   expiry=2027-09-28 16:21:35        # Expiry as timestamp.
+| `Add Cookie`   foo   bar   http://address.com/path/to/site   expiry=1822137695                 # Expiry as epoch seconds.</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Add Style Tag" source="C:\Python\Lib\site-packages\Browser\keywords\evaluation.py" lineno="86">
+<arguments>
+<arg>content: str</arg>
+</arguments>
+<doc>Adds a &lt;style type="text/css"&gt; tag with the content.
+
+``content`` Raw CSS content to be injected into frame.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Check Checkbox" source="C:\Python\Lib\site-packages\Browser\keywords\interaction.py" lineno="481">
+<arguments>
+<arg>selector: str</arg>
+</arguments>
+<doc>Checks the checkbox or selects radio button found by ``selector``.
+
+``selector`` Selector of the checkbox.
+See the `Finding elements` section for details about the selectors.
+
+Does nothing if the element is already checked/selected.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Clear Text" source="C:\Python\Lib\site-packages\Browser\keywords\interaction.py" lineno="104">
+<arguments>
+<arg>selector: str</arg>
+</arguments>
+<doc>Clears the text field found by ``selector``.
+
+``selector`` Selector of the text field.
+See the `Finding elements` section for details about the selectors.
+
+See `Type Text` for emulating typing text character by character.
+See `Fill Text` for direct filling of the full text at once.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Click" source="C:\Python\Lib\site-packages\Browser\keywords\interaction.py" lineno="255">
+<arguments>
+<arg>selector: str</arg>
+<arg>button: MouseButton { left | middle | right } = MouseButton.left</arg>
+<arg>clickCount: int = 1</arg>
+<arg>delay: timedelta = None</arg>
+<arg>position_x: float = None</arg>
+<arg>position_y: float = None</arg>
+<arg>force: bool = False</arg>
+<arg>noWaitAfter: bool = False</arg>
+<arg>*modifiers: KeyboardModifier { Alt | Control | Meta | Shift }</arg>
+</arguments>
+<doc>Simulates mouse click on the element found by ``selector``.
+
+This keyword clicks an element matching ``selector`` by performing the following steps:
+- Find an element matches selector. If there is none, wait until a matching element is attached to the DOM.
+- Wait for actionability checks on the matched element, unless ``force`` option is set. If the element is detached during the checks, the whole action is retried.
+- Scroll the element into view if needed.
+- Use `Mouse Button` to click in the center of the element, or the specified position.
+- Wait for initiated navigation to either succeed or fail, unless ``noWaitAfter`` option is set.
+
+``selector`` Selector element to click.
+See the `Finding elements` section for details about the selectors.
+
+``button`` Defaults to ``left`` if invalid.
+
+``clickCount`` Defaults to 1.
+
+``delay`` Time to wait between mouse-down and mouse-up.
+Defaults to 0.
+
+``position_x`` &amp; ``position_y`` A point to click relative to the
+top-left corner of element bounding-box. Only positive values within the bounding-box are allowed.
+If not specified, clicks to some visible point of the element.
+
+``force`` Set to True to skip Playwright's [https://playwright.dev/docs/actionability | Actionability checks].
+
+``noWaitAfter`` Actions that initiate navigation, are waiting for
+these navigation to happen and for pages to start loading.
+You can opt out of waiting via setting this flag.
+You would only need this option in the exceptional cases such as navigating
+to inaccessible pages. Defaults to ``False``.
+
+``*modifiers``
+Modifier keys to press. Ensures that only these modifiers are pressed
+during the click, and then restores current modifiers back.
+If not specified, currently pressed modifiers are used.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Close Browser" source="C:\Python\Lib\site-packages\Browser\keywords\playwright_state.py" lineno="101">
+<arguments>
+<arg>browser: str = CURRENT</arg>
+</arguments>
+<doc>Closes the current browser. Activated browser is set to first active browser.
+Closes all context and pages belonging to this browser.
+See `Browser, Context and Page` for more information about Browser and related concepts.
+
+``browser`` &lt; ``CURRENT`` | ``ALL`` | str &gt; If value is not ``CURRENT``
+it should be a string referencing the id of the browser to be closed.
+If ``ALL`` is provided `Close All Browsers` is executed.</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Close Context" source="C:\Python\Lib\site-packages\Browser\keywords\playwright_state.py" lineno="125">
+<arguments>
+<arg>context: str = CURRENT</arg>
+<arg>browser: str = CURRENT</arg>
+</arguments>
+<doc>Closes a Context. Activated context is set to first active context.
+Closes pages belonging to this context.
+See `Browser, Context and Page` for more information about Context and related concepts.
+
+``context`` &lt; ``CURRENT`` | ``ALL`` | str &gt; Close context with specified id. If ``ALL``
+is passed, all contexts of the specified browser are closed. Defaults to CURRENT.
+
+``browser`` &lt; ``CURRENT`` | ``ALL`` | str &gt; Close context in specified browser. If value is not "CURRENT"
+it should be a string referencing the id of the browser where to close context.</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Close Page" source="C:\Python\Lib\site-packages\Browser\keywords\playwright_state.py" lineno="175">
+<arguments>
+<arg>page: str = CURRENT</arg>
+<arg>context: str = CURRENT</arg>
+<arg>browser: str = CURRENT</arg>
+</arguments>
+<doc>Closes the ``page`` in ``context`` in ``browser``. Defaults to current for all three.
+Activated page is set to first active page.
+See `Browser, Context and Page` for more information about Page and related concepts.
+
+``page`` &lt; ``CURRENT`` | ``ALL`` | str &gt; Id of the page to close. If value is not "CURRENT"
+it should be a string referencing the id of the context where to close page.
+If ``ALL`` is passed, all pages of the given context are closed. Defaults to CURRENT.
+
+``context`` &lt; ``CURRENT`` | ``ALL`` | str &gt; Id of the context that belongs to the page to be closed.
+If ``ALL`` is passed, the requested pages of all contexts are closed. Defaults to CURRENT.
+
+``browser`` &lt; ``CURRENT`` | ``ALL`` | str &gt; Id of the browser that belongs to the page to be closed.
+If ``ALL`` is passed, the requested pages depending of the context of all browsers are closed.
+Defaults to CURRENT.
+
+Returns a list of dictionaries containing id, errors and console messages from the page.</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Connect To Browser" source="C:\Python\Lib\site-packages\Browser\keywords\playwright_state.py" lineno="248">
+<arguments>
+<arg>wsEndpoint: str</arg>
+<arg>browser: SupportedBrowsers { chromium | firefox | webkit } = SupportedBrowsers.chromium</arg>
+</arguments>
+<doc>Connect to a playwright Browser.
+See `Browser, Context and Page` for more information about Browser and related concepts.
+
+Returns a stable identifier for the connected browser.
+
+``wsEndpoint`` Address to connect to.
+
+``browser`` Opens the specified browser. Defaults to chromium.</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Delete All Cookies" source="C:\Python\Lib\site-packages\Browser\keywords\cookie.py" lineno="151">
+<arguments>
+</arguments>
+<doc>Deletes all cookies from the currently active browser context.</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Deselect Options" source="C:\Python\Lib\site-packages\Browser\keywords\interaction.py" lineno="539">
+<arguments>
+<arg>selector: str</arg>
+</arguments>
+<doc>Deselects all options from select element found by ``selector``.
+
+``selector`` Selector of the select tag.
+See the `Finding elements` section for details about the selectors.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Download" source="C:\Python\Lib\site-packages\Browser\keywords\evaluation.py" lineno="96">
+<arguments>
+<arg>url: str</arg>
+</arguments>
+<doc>Download given url content.
+
+Keyword returns dictionary which contains downloaded file path
+and suggested filename as keys (saveAs and suggestedFilename).
+See `Wait For Download` for more details. Keyword requires
+that current active page has loaded valid html webpage.</doc>
+<tags>
+<tag>Page Content</tag>
+</tags>
+</kw>
+<kw name="Drag And Drop" source="C:\Python\Lib\site-packages\Browser\keywords\interaction.py" lineno="659">
+<arguments>
+<arg>selector_from: str</arg>
+<arg>selector_to: str</arg>
+<arg>steps: int = 1</arg>
+</arguments>
+<doc>Executes a Drag&amp;Drop operation from the element selected by ``selector_from``
+to the element selected by ``selector_to``.
+See the `Finding elements` section for details about the selectors.
+
+First it moves the mouse to the start-point,
+then presses the left mouse button,
+then moves to the end-point in specified number of steps,
+then releases the mouse button.
+
+Start- and end-point are defined by the center of the elements boundingbox.
+
+``selector_from`` identifies the element, which center is the start-point.
+
+``selector_to`` identifies the element, which center is the end-point.
+
+``steps`` defines how many intermediate mouse move events are sent.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Drag And Drop By Coordinates" source="C:\Python\Lib\site-packages\Browser\keywords\interaction.py" lineno="686">
+<arguments>
+<arg>from_x: float</arg>
+<arg>from_y: float</arg>
+<arg>to_x: float</arg>
+<arg>to_y: float</arg>
+<arg>steps: int = 1</arg>
+</arguments>
+<doc>Executes a Drag&amp;Drop operation from a coordinate to another coordinate.
+
+First it moves the mouse to the start-point,
+then presses the left mouse button,
+then moves to the end-point in specified number of steps,
+then releases the mouse button.
+
+Start- and end-point are defined by ``x`` and ``y`` coordinates relative to
+the top left corner of the pages viewport.
+
+``from_x`` &amp; ``from_y`` identify the the start-point.
+
+``to_x`` &amp; ``to_y`` identify the the end-point.
+
+``steps`` defines how many intermediate mouse move events are sent.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Eat All Cookies" source="C:\Python\Lib\site-packages\Browser\keywords\cookie.py" lineno="158">
+<arguments>
+</arguments>
+<doc>Eat all cookies for all easter.</doc>
+</kw>
+<kw name="Execute JavaScript" source="C:\Python\Lib\site-packages\Browser\keywords\evaluation.py" lineno="28">
+<arguments>
+<arg>function: str</arg>
+<arg>selector: str = </arg>
+</arguments>
+<doc>Executes given javascript on the page.
+
+``function`` A valid javascript function or a javascript function body. For example
+``() =&gt; true`` and ``true`` will behave similarly.
+
+``selector`` Selector to resolve and pass to the JavaScript function. This will be the first
+argument the function receives. If given a selector a function is necessary, with an argument
+to capture the elementhandle. For example ``(element) =&gt; document.activeElement === element``
+See the `Finding elements` section for details about the selectors.
+
+[https://github.com/MarketSquare/robotframework-browser/tree/master/atest/test/06_Examples/js_evaluation.robot | Usage examples. ]</doc>
+<tags>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Fill Secret" source="C:\Python\Lib\site-packages\Browser\keywords\interaction.py" lineno="177">
+<arguments>
+<arg>selector: str</arg>
+<arg>secret: str</arg>
+</arguments>
+<doc>Fills the given secret from ``variable_name`` into the
+text field found by ``selector``.
+
+This keyword does not log secret in Robot Framework logs, when
+keywords resolves the ``secret`` variable internally. When
+``secret`` variable is prefixed with `$`, without the curly braces,
+ library will resolve the corresponding Robot Framework variable.
+ If ``secret`` variable is prefixed with `%`, library will resolve
+ corresponding environment variable. Example `$Password`` will
+ resolve to ``${Password}`` Robot Framework variable. Also
+ ``%ENV_PWD``will resolve to ``%{ENV_PWD}`` environment variable.
+ Using normal Robt Framework variables or plain text will also work,
+ but then library can not prevent Robot Framework leaking the secrets
+ in the output files. Also library will log a warning if library
+ can not resolve the secret internally.
+
+If ``enable_playwright_debug`` is enabled in the library import,
+secret will be always visible as plain text in the playwright debug
+logs, regardless of the Robot Framework log level.
+
+``selector`` Selector of the text field.
+See the `Finding elements` section for details about the selectors.
+
+See `Fill Text` for other details.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Fill Text" source="C:\Python\Lib\site-packages\Browser\keywords\interaction.py" lineno="82">
+<arguments>
+<arg>selector: str</arg>
+<arg>txt: str</arg>
+</arguments>
+<doc>Clears and fills the given ``text`` into the text field found by ``selector``.
+
+This method waits for an element matching the ``selector`` to appear,
+waits for actionability checks, focuses the element, fills it and
+triggers an input event after filling.
+
+If the element matching selector is not an &lt;input&gt;, &lt;textarea&gt; or
+[contenteditable] element, this method throws an error. Note that
+you can pass an empty string as ``text`` to clear the input field.
+
+``selector`` Selector of the text field.
+See the `Finding elements` section for details about the selectors.
+
+``txt`` Text for the text field.
+
+See `Type Text` for emulating typing text character by character.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Focus" source="C:\Python\Lib\site-packages\Browser\keywords\interaction.py" lineno="378">
+<arguments>
+<arg>selector: str</arg>
+</arguments>
+<doc>Moves focus on to the element found by ``selector``.
+
+``selector`` Selector of the element.
+See the `Finding elements` section for details about the selectors.
+
+If there's no element matching selector, the method waits until a
+matching element appears in the DOM. Timeouts after 10 seconds.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Get Attribute" source="C:\Python\Lib\site-packages\Browser\keywords\getters.py" lineno="219">
+<arguments>
+<arg>selector: str</arg>
+<arg>attribute: str</arg>
+<arg>assertion_operator: AssertionOperator { equal | == | should be | inequal | ... } = None</arg>
+<arg>assertion_expected: typing.Any = None</arg>
+<arg>message: str = None</arg>
+</arguments>
+<doc>Returns the HTML ``attribute`` of the element found by ``selector``.
+
+Optionally asserts that the attribute value matches the specified
+assertion.
+
+``selector`` Selector from which the info is to be retrieved.
+See the `Finding elements` section for details about the selectors.
+
+``attribute`` Requested attribute name.
+
+When a attribute is selected that is not present and no assertion operator is set,
+the keyword fails. If an assertion operator is set and the attribute is not present,
+the returned value is ``None``.
+This can be used to assert check the presents or the absents of an attribute.
+
+``message`` overrides the default error message.
+
+Example Element:
+| &lt;button class="login button active" id="enabled_button" something&gt;Login&lt;/button&gt;
+
+Example Code:
+| Get Attribute   id=enabled_button    disabled                   # FAIL =&gt; "Attribute 'disabled' not found!"
+| Get Attribute   id=enabled_button    disabled     ==    None     # PASS =&gt; returns: None
+| Get Attribute   id=enabled_button    something    evaluate    value is not None    # PASS =&gt;  returns: True
+| Get Attribute   id=enabled_button    disabled     evaluate    value is None        # PASS =&gt;  returns: True
+
+
+See `Assertions` for further details for the assertion arguments. Defaults to None.</doc>
+<tags>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+</kw>
+<kw name="Get Attribute Names" source="C:\Python\Lib\site-packages\Browser\keywords\getters.py" lineno="275">
+<arguments>
+<arg>selector: str</arg>
+<arg>assertion_operator: AssertionOperator { equal | == | should be | inequal | ... } = None</arg>
+<arg>*assertion_expected</arg>
+<arg>message: typing.Union[str, NoneType] = None</arg>
+</arguments>
+<doc>Returns all HTML attribute names of an element as a list.
+
+Optionally asserts that these match the specified assertion.
+
+``selector`` Selector from which the info is to be retrieved.
+See the `Finding elements` section for details about the selectors.
+
+``assertion_operator`` See `Assertions` for further details. Defaults to None.
+
+Available assertions:
+- ``==`` and ``!=`` can work with multiple values
+- ``contains`` / ``*=`` only accepts one single expected value
+
+Other operators are not allowed.
+
+``message`` overrides the default error message.</doc>
+<tags>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+</kw>
+<kw name="Get BoundingBox" source="C:\Python\Lib\site-packages\Browser\keywords\getters.py" lineno="683">
+<arguments>
+<arg>selector: str</arg>
+<arg>key: BoundingBoxFields { width | height | x | y | ALL } = BoundingBoxFields.ALL</arg>
+<arg>assertion_operator: AssertionOperator { equal | == | should be | inequal | ... } = None</arg>
+<arg>assertion_expected: typing.Any = None</arg>
+<arg>message: str = None</arg>
+</arguments>
+<doc>Gets elements size and location as an object ``{x: float, y: float, width: float, height: float}``.
+
+``selector`` Selector from which shall be retrieved.
+See the `Finding elements` section for details about the selectors.
+
+``key`` Optionally filters the returned values.
+If keys is set to ``ALL`` (default) it will return the BoundingBox as Dictionary,
+otherwise it will just return the single value selected by the key.
+Note: If a single value is retrieved, an assertion does *not* need a ``validate``
+combined with a cast of ``value``.
+
+``message`` overrides the default error message.
+
+See `Assertions` for further details for the assertion arguments. Defaults to None.
+
+Example use:
+| ${bounding_box}=    Get BoundingBox    id=element                 # unfiltered
+| Log                 ${bounding_box}                               # {'x': 559.09375, 'y': 75.5, 'width': 188.796875, 'height': 18}
+| ${x}=               Get BoundingBox    id=element    x            # filtered
+| Log                 X: ${x}                                       # X: 559.09375
+| # Assertions:
+| Get BoundingBox     id=element         width         &gt;    180
+| Get BoundingBox     id=element         ALL           validate    value['x'] &gt; value['y']*2</doc>
+<tags>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+</kw>
+<kw name="Get Browser Catalog" source="C:\Python\Lib\site-packages\Browser\keywords\playwright_state.py" lineno="627">
+<arguments>
+<arg>assertion_operator: AssertionOperator { equal | == | should be | inequal | ... } = None</arg>
+<arg>assertion_expected: typing.Any = None</arg>
+<arg>message: str = None</arg>
+</arguments>
+<doc>Returns all browsers, open contexts in them and open pages in these contexts.
+See `Browser, Context and Page` for more information about these concepts.
+
+``message`` overrides the default error message.
+
+The data is parsed into a python list containing data representing the open Objects.
+
+On the root level the data contains a list of open browsers.
+
+Data can be manipulated also with ``assertion_operator`` for example to find
+a specific id based on index or page title with ``then`` operator.
+
+Return value can also be asserted against expected value.
+
+Sample:
+| [
+|   {
+|     "type": "chromium",
+|     "id": "browser=96207191-8147-44e7-b9ac-5e04f2709c1d",
+|     "contexts": [
+|       {
+|         "type": "context",
+|         "id": "context=525d8e5b-3c4e-4baa-bfd4-dfdbc6e86089",
+|         "activePage": "page=f90c97b8-eaaf-47f2-98b2-ccefd3450f12",
+|         "pages": [
+|           {
+|             "type": "page",
+|             "title": "Robocorp",
+|             "url": "https://robocorp.com/",
+|             "id": "page=7ac15782-22d2-48b4-8591-ff17663fa737",
+|             "timestamp": 1598607713.858
+|           },
+|           {
+|             "type": "page",
+|             "title": "Home - Reaktor",
+|             "url": "https://www.reaktor.com/",
+|             "id": "page=f90c97b8-eaaf-47f2-98b2-ccefd3450f12",
+|             "timestamp": 1598607714.702
+|           }
+|         ]
+|       }
+|     ],
+|     "activeContext": "context=525d8e5b-3c4e-4baa-bfd4-dfdbc6e86089",
+|     "activeBrowser": false
+|   },
+|   {
+|     "type": "firefox",
+|     "id": "browser=ad99abac-17a9-472b-ac7f-d6352630834e",
+|     "contexts": [
+|       {
+|         "type": "context",
+|         "id": "context=bc64f1ba-5e76-46dd-9735-4bd344afb9c0",
+|         "activePage": "page=8baf2991-5eaf-444d-a318-8045f914e96a",
+|         "pages": [
+|           {
+|             "type": "page",
+|             "title": "Software-Qualitätssicherung und Softwaretest",
+|             "url": "https://www.imbus.de/",
+|             "id": "page=8baf2991-5eaf-444d-a318-8045f914e96a",
+|             "timestamp": 1598607716.828
+|           }
+|         ]
+|       }
+|     ],
+|     "activeContext": "context=bc64f1ba-5e76-46dd-9735-4bd344afb9c0",
+|     "activeBrowser": true
+|   }
+| ]</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Getter</tag>
+</tags>
+</kw>
+<kw name="Get Browser Ids" source="C:\Python\Lib\site-packages\Browser\keywords\playwright_state.py" lineno="781">
+<arguments>
+<arg>browser: SelectionType { ACTIVE | CURRENT | ALL | ANY } = SelectionType.ALL</arg>
+</arguments>
+<doc>Returns a list of ids from open browsers.
+See `Browser, Context and Page` for more information about Browser and related concepts.
+
+
+``browser`` Defaults to ``ALL``
+- ``ALL`` / ``ANY`` Returns all ids as a list.
+- ``ACTIVE`` / ``CURRENT`` Returns the id of the currently active browser as list.
+
+The ACTIVE browser is a synonym for the CURRENT Browser.</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Getter</tag>
+</tags>
+</kw>
+<kw name="Get Checkbox State" source="C:\Python\Lib\site-packages\Browser\keywords\getters.py" lineno="469">
+<arguments>
+<arg>selector: str</arg>
+<arg>assertion_operator: AssertionOperator { equal | == | should be | inequal | ... } = None</arg>
+<arg>expected_state: typing.Union[bool, str] = Unchecked</arg>
+<arg>message: str = None</arg>
+</arguments>
+<doc>Returns the state of the checkbox found by ``selector``.
+
+``selector`` Selector which shall be examined.
+See the `Finding elements` section for details about the selectors.
+
+Optionally asserts that the state matches the specified assertion.
+
+``assertion_operator`` See `Assertions` for further details. Defaults to None.
+
+- ``==`` and ``!=`` and equivalent are allowed on boolean values
+- other operators are not accepted.
+
+``expected_state`` boolean value of expected state.
+Strings are interpreted as booleans.
+All strings are ``${True}`` except of the
+following `FALSE, NO, OFF, 0, UNCHECKED, NONE, ${EMPTY}``.
+(case-insensitive). Defaults to unchecked
+
+- ``checked`` =&gt; ``True``
+- ``unchecked`` =&gt; ``False``
+
+``message`` overrides the default error message.</doc>
+<tags>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+</kw>
+<kw name="Get Classes" source="C:\Python\Lib\site-packages\Browser\keywords\getters.py" lineno="309">
+<arguments>
+<arg>selector: str</arg>
+<arg>assertion_operator: AssertionOperator { equal | == | should be | inequal | ... } = None</arg>
+<arg>*assertion_expected</arg>
+<arg>message: typing.Union[str, NoneType] = None</arg>
+</arguments>
+<doc>Returns all classes of an element as a list.
+
+Optionally asserts that the value matches the specified assertion.
+
+``selector`` Selector from which the info is to be retrieved.
+See the `Finding elements` section for details about the selectors.
+
+``assertion_operator`` See `Assertions` for further details. Defaults to None.
+
+Available assertions:
+- ``==`` and ``!=`` can work with multiple values
+- ``contains`` / ``*=`` only accepts one single expected value
+
+Other operators are not allowed.</doc>
+<tags>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+</kw>
+<kw name="Get Client Size" source="C:\Python\Lib\site-packages\Browser\keywords\getters.py" lineno="841">
+<arguments>
+<arg>selector: str = None</arg>
+<arg>key: SizeFields { width | height | ALL } = SizeFields.ALL</arg>
+<arg>assertion_operator: AssertionOperator { equal | == | should be | inequal | ... } = None</arg>
+<arg>assertion_expected: typing.Any = None</arg>
+<arg>message: str = None</arg>
+</arguments>
+<doc>Gets elements or pages client size (``clientHeight``, ``clientWidth``) as object {width: float, height: float}.
+
+``selector`` Optional selector from which shall be retrieved.
+If no selector is given the client size of the page itself is used (``document.scrollingElement``).
+See the `Finding elements` section for details about the selectors.
+
+``key`` Optionally filters the returned values.
+If keys is set to ``ALL`` (default) it will return the scroll size as dictionary,
+otherwise it will just return the single value selected by the key.
+
+``message`` overrides the default error message.
+
+See `Assertions` for further details for the assertion arguments. Defaults to None.
+
+See `Get BoundingBox` or `Get Scroll Size` for examples.</doc>
+<tags>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+</kw>
+<kw name="Get Context Ids" source="C:\Python\Lib\site-packages\Browser\keywords\playwright_state.py" lineno="801">
+<arguments>
+<arg>context: SelectionType { ACTIVE | CURRENT | ALL | ANY } = SelectionType.ALL</arg>
+<arg>browser: SelectionType { ACTIVE | CURRENT | ALL | ANY } = SelectionType.ALL</arg>
+</arguments>
+<doc>Returns a list of context ids based on the browser selection.
+See `Browser, Context and Page` for more information about Context and related concepts.
+
+``ALL`` and ``ANY`` are synonyms.
+``ACTIVE`` and ``CURRENT`` are also synonyms.
+
+``context`` Defaults to ``ALL``
+- ``ALL`` Returns all context ids as a list.
+- ``ACTIVE`` Returns the id of the active context as a list.
+
+``browser`` Defaults to ``ALL``
+- ``ALL`` context ids from all open browsers shall be fetched.
+- ``ACTIVE`` only context ids from the active browser shall be fetched.
+
+The ACTIVE context of the ACTIVE Browser is the ``Current`` Context.</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Getter</tag>
+</tags>
+</kw>
+<kw name="Get Cookie" source="C:\Python\Lib\site-packages\Browser\keywords\cookie.py" lineno="174">
+<arguments>
+<arg>cookie: str</arg>
+<arg>return_type: CookieType { dictionary | dict | string | str } = CookieType.dictionary</arg>
+</arguments>
+<doc>Returns information of cookie with ``name`` as a Robot Framework dot dictionary or a string.
+
+``cookie`` Name of the cookie to be retrieved.
+
+If ``return_type`` is ``dictionary`` or ``dict`` then keyword returns a of Robot Framework
+[https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#accessing-list-and-dictionary-items|dot dictionary]
+The dictionary contains all possible key value pairs of the cookie. If ``return_type`` is ``string`` or ``str``,
+then keyword returns the cookie as a string in format: ``name1=value1``. The return value contains only
+``name`` and ``value`` keys of the cookie.
+
+If no cookie is found with ``name`` keyword fails. The cookie dictionary contains
+details about the cookie. Keys available in the dictionary are documented in the table below.
+
+| *Value*  | *Explanation*                                                                              |
+| name     | The name of a cookie, mandatory.                                                           |
+| value    | Value of the cookie, mandatory.                                                            |
+| url      | Define the scope of the cookie, what URLs the cookies should be sent to.                   |
+| domain   | Specifies which hosts are allowed to receive the cookie.                                   |
+| path     | Indicates a URL path that must exist in the requested URL, for example `/`.                |
+| expiry   | Lifetime of a cookie. Returned as datatime object.                                         |
+| httpOnly | When true, the cookie is not accessible via JavaScript.                                    |
+| secure   | When true, the cookie is only used with HTTPS connections.                                 |
+| sameSite | Attribute lets servers require that a cookie shouldn't be sent with cross-origin requests. |
+
+See
+[https://playwright.dev/docs/api/class-browsercontext#browsercontextaddcookiescookies|playwright documentation]
+for details about each attribute.
+
+Example:
+| ${cookie}=        Get Cookie              Foobar
+| Should Be Equal   ${cookie.value}         Tidii
+| Should Be Equal   ${cookie.expiry.year}   ${2020}</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Getter</tag>
+</tags>
+</kw>
+<kw name="Get Cookies" source="C:\Python\Lib\site-packages\Browser\keywords\cookie.py" lineno="29">
+<arguments>
+<arg>return_type: CookieType { dictionary | dict | string | str } = CookieType.dictionary</arg>
+</arguments>
+<doc>Returns cookies from the current active browser context.
+
+If ``return_type`` is ``dictionary`` or ``dict`` then keyword returns list of Robot Framework
+[https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#accessing-list-and-dictionary-items|dot dictionaries]
+The dictionary contains all possible key value pairs of the cookie. See `Get Cookie` keyword documentation
+about the dictionary keys and values.
+
+If ``return_type`` is ``string`` or ``str``, then keyword returns the cookie as a string in format:
+``name1=value1; name2=value2; name3=value3``. The return value contains only ``name`` and ``value`` keys of the
+cookie.</doc>
+<tags>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+</kw>
+<kw name="Get Device" source="C:\Python\Lib\site-packages\Browser\keywords\device_descriptors.py" lineno="37">
+<arguments>
+<arg>name: str</arg>
+</arguments>
+<doc>Get a single device decriptor with name exactly matching name.
+
+``name`` Given name of the requested device. See Playwright's
+[https://github.com/Microsoft/playwright/blob/master/src/server/deviceDescriptors.ts | deviceDescriptors.ts]
+for a formatted list.
+
+Allows a concise syntax to set website testing values to exact matches of specific
+mobile devices.
+
+Use by passing to a context. After creating a context with devicedescriptor,
+before using ensure your active page is on that context.
+Usage:
+
+| ${device}=          Get Device       iPhone X
+| New Context         &amp;{device}
+| New Page
+| Get Viewport Size   # returns { "width": 375, "height": 812 }</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Getter</tag>
+</tags>
+</kw>
+<kw name="Get Devices" source="C:\Python\Lib\site-packages\Browser\keywords\device_descriptors.py" lineno="25">
+<arguments>
+</arguments>
+<doc>Returns a dict of all playwright device descriptors.
+
+See Playwright's [https://github.com/Microsoft/playwright/blob/master/src/server/deviceDescriptors.ts | deviceDescriptors.ts]
+for a formatted list.</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Getter</tag>
+</tags>
+</kw>
+<kw name="Get Element" source="C:\Python\Lib\site-packages\Browser\keywords\getters.py" lineno="601">
+<arguments>
+<arg>selector: str</arg>
+</arguments>
+<doc>Returns a reference to a Playwright element handle.
+
+The reference can be used in subsequent selectors.
+
+``selector`` Selector from which shall be retrieved .
+See the `Finding elements` section for details about the selectors.</doc>
+<tags>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+</kw>
+<kw name="Get Element Count" source="C:\Python\Lib\site-packages\Browser\keywords\getters.py" lineno="516">
+<arguments>
+<arg>selector: str</arg>
+<arg>assertion_operator: AssertionOperator { equal | == | should be | inequal | ... } = None</arg>
+<arg>expected_value: typing.Union[int, str] = 0</arg>
+<arg>message: str = None</arg>
+</arguments>
+<doc>Returns the count of elements found with ``selector``.
+
+Optionally asserts that the count matches the specified assertion.
+
+``selector`` Selector which shall be counted.
+See the `Finding elements` section for details about the selectors.
+
+``assertion_operator`` See `Assertions` for further details. Defaults to None.
+
+``expected_value`` Expected value for the counting
+
+``message`` overrides the default error message.</doc>
+<tags>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+</kw>
+<kw name="Get Element State" source="C:\Python\Lib\site-packages\Browser\keywords\getters.py" lineno="887">
+<arguments>
+<arg>selector: str</arg>
+<arg>state: ElementStateKey { attached | visible | disabled | ... } = ElementStateKey.visible</arg>
+<arg>assertion_operator: AssertionOperator { equal | == | should be | inequal | ... } = None</arg>
+<arg>assertion_expected: bool = True</arg>
+<arg>message: str = None</arg>
+</arguments>
+<doc>Get the given state from the element found by ``selector``.
+
+If the selector does satisfy the expected state it will return ``True`` otherwise ``False``.
+
+``selector`` Selector of the corresponding object.
+See the `Finding elements` section for details about the selectors.
+
+``state`` Defaults to visible. Possible states are:
+- ``attached`` : to be present in DOM.
+- ``visible`` : to have non-empty bounding box and no visibility:hidden.
+- ``disabled`` : to be ``disabled``. Can be used on &lt;button&gt;, &lt;fieldset&gt;, &lt;input&gt;, &lt;optgroup&gt;, &lt;option&gt;, &lt;select&gt; and &lt;textarea&gt;.
+- ``readonly`` : to be ``readOnly``. Can be used on &lt;input&gt; and &lt;textarea&gt;.
+- ``selected`` : to be ``selected``. Can be used on &lt;option&gt;.
+- ``focused`` : to be the ``activeElement``.
+- ``checked`` : to be ``checked`` . Can be used on &lt;input&gt;.
+
+Note that element must be attached to DOM to be able to fetch the state of ``readonly`` , ``selectec`` and ``checked``.
+The other states are false if the requested element is not attached.
+
+Note that element without any content or with display:none has an empty bounding box
+and is not considered visible.
+
+``message`` overrides the default error message.</doc>
+<tags>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+</kw>
+<kw name="Get Elements" source="C:\Python\Lib\site-packages\Browser\keywords\getters.py" lineno="614">
+<arguments>
+<arg>selector: str</arg>
+</arguments>
+<doc>Returns a reference to playwright element handle for all matched elements by ``selector``.
+
+``selector`` Selector from which shall be retrieved.
+See the `Finding elements` section for details about the selectors.</doc>
+<tags>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+</kw>
+<kw name="Get Page Ids" source="C:\Python\Lib\site-packages\Browser\keywords\playwright_state.py" lineno="846">
+<arguments>
+<arg>page: SelectionType { ACTIVE | CURRENT | ALL | ANY } = SelectionType.ALL</arg>
+<arg>context: SelectionType { ACTIVE | CURRENT | ALL | ANY } = SelectionType.ALL</arg>
+<arg>browser: SelectionType { ACTIVE | CURRENT | ALL | ANY } = SelectionType.ALL</arg>
+</arguments>
+<doc>Returns a list of page ids based on the context and browser selection.
+See `Browser, Context and Page` for more information about Page and related concepts.
+
+``ALL`` and ``ANY`` are synonyms.
+``ACTIVE`` and ``CURRENT`` are also synonyms.
+
+``page``
+- ``ALL`` Returns all page ids as a list.
+- ``ACTIVE`` Returns the id of the active page as a list.
+
+``context``
+- ``ALL`` page ids from all contexts shall be fetched.
+- ``ACTIVE`` only page ids from the active context shall be fetched.
+
+``browser``
+- ``ALL`` page ids from all open browsers shall be fetched.
+- ``ACTIVE`` only page ids from the active browser shall be fetched.
+
+Example:
+| Test Case
+|     `New Page`    http://www.imbus.de
+|     `New Page`    http://www.reaktor.com
+|     ${current_page}=   Get Page IDs    ACTIVE    ACTIVE    ACTIVE
+|     Log                Current page ID is: ${current_page}[0]
+|     ${all_pages}=      Get Page IDs    CURRENT   CURRENT   ALL
+|     Log Many           These are all Page IDs    @{all_pages}
+
+The ACTIVE page of the ACTIVE context of the ACTIVE Browser is the ``Current`` Page.</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Getter</tag>
+</tags>
+</kw>
+<kw name="Get Page Source" source="C:\Python\Lib\site-packages\Browser\keywords\getters.py" lineno="100">
+<arguments>
+<arg>assertion_operator: AssertionOperator { equal | == | should be | inequal | ... } = None</arg>
+<arg>assertion_expected: typing.Any = None</arg>
+<arg>message: str = None</arg>
+</arguments>
+<doc>Gets pages HTML source as a string.
+
+``message`` overrides the default error message.
+
+Optionally does a string assertion.
+
+See `Assertions` for further details for the assertion arguments. Defaults to None.</doc>
+<tags>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+</kw>
+<kw name="Get Property" source="C:\Python\Lib\site-packages\Browser\keywords\getters.py" lineno="173">
+<arguments>
+<arg>selector: str</arg>
+<arg>property: str</arg>
+<arg>assertion_operator: AssertionOperator { equal | == | should be | inequal | ... } = None</arg>
+<arg>assertion_expected: typing.Any = None</arg>
+<arg>message: str = None</arg>
+</arguments>
+<doc>Returns the ``property`` of the element found by ``selector``.
+
+Optionally asserts that the property value matches the specified
+assertion.
+
+``selector`` Selector from which the info is to be retrieved.
+See the `Finding elements` section for details about the selectors.
+
+``property`` Requested property name.
+
+If ``assertion_operator`` is set and property is not found, ``value`` is ``None``
+and Keyword does not fail. See `Get Attribute` for examples.
+
+See `Assertions` for further details for the assertion arguments. Defaults to None.
+
+``message`` overrides the default error message.</doc>
+<tags>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+</kw>
+<kw name="Get Scroll Position" source="C:\Python\Lib\site-packages\Browser\keywords\getters.py" lineno="786">
+<arguments>
+<arg>selector: str = None</arg>
+<arg>key: AreaFields { top | left | bottom | right | ALL } = AreaFields.ALL</arg>
+<arg>assertion_operator: AssertionOperator { equal | == | should be | inequal | ... } = None</arg>
+<arg>assertion_expected: typing.Any = None</arg>
+<arg>message: str = None</arg>
+</arguments>
+<doc>Gets elements or pages current scroll position as object ``{top: float, left: float, bottom: float, right: float}``.
+
+It describes the rectangle which is visible of the scrollable content of that element.
+all values are measured from position {top: 0, left: 0}.
+
+``top`` uses js function scrollTop, ``left`` uses scrollLeft and
+``bottom`` and ``right`` are calculated with the client size.
+
+``selector`` Optional selector from which shall be retrieved.
+If no selector is given the client size of the page itself is used (``document.scrollingElement``).
+See the `Finding elements` section for details about the selectors.
+
+``key`` Optionally filters the returned values.
+If keys is set to ``ALL`` (default) it will return the scroll position as dictionary,
+otherwise it will just return the single value selected by the key.
+
+``message`` overrides the default error message.
+
+See `Assertions` for further details for the assertion arguments. Defaults to None.
+
+See `Get BoundingBox` or `Get Scroll Size` for examples.</doc>
+<tags>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+</kw>
+<kw name="Get Scroll Size" source="C:\Python\Lib\site-packages\Browser\keywords\getters.py" lineno="734">
+<arguments>
+<arg>selector: str = None</arg>
+<arg>key: SizeFields { width | height | ALL } = SizeFields.ALL</arg>
+<arg>assertion_operator: AssertionOperator { equal | == | should be | inequal | ... } = None</arg>
+<arg>assertion_expected: typing.Any = None</arg>
+<arg>message: str = None</arg>
+</arguments>
+<doc>Gets elements or pages scrollable size as object ``{width: float, height: float}``.
+
+``selector`` Optional selector from which shall be retrieved.
+If no selector is given the scroll size of the page itself is used.
+See the `Finding elements` section for details about the selectors.
+
+``key`` Optionally filters the returned values.
+If keys is set to ``ALL`` (default) it will return the scroll size as dictionary,
+otherwise it will just return the single value selected by the key.
+
+``message`` overrides the default error message.
+
+See `Assertions` for further details for the assertion arguments. Defaults to None.
+
+See `Get BoundingBox` for more similar examples.
+
+Example use:
+| ${height}=         Get Scroll Size    height                          # filtered page by height
+| Log                Width: ${height}                                   # Height: 58425
+| ${scroll_size}=    Get Scroll Size    id=keyword-shortcuts-container  # unfiltered element
+| Log                ${scroll_size}                                     # {'width': 253, 'height': 3036}</doc>
+<tags>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+</kw>
+<kw name="Get Select Options" source="C:\Python\Lib\site-packages\Browser\keywords\getters.py" lineno="361">
+<arguments>
+<arg>selector: str</arg>
+<arg>assertion_operator: AssertionOperator { equal | == | should be | inequal | ... } = None</arg>
+<arg>assertion_expected: typing.Any = None</arg>
+<arg>message: str = None</arg>
+</arguments>
+<doc>Returns attributes of options of a ``select`` element as a list of dictionaries.
+Returned dictionaries have the following keys and their values
+"index", "value", "label" and "selected".
+
+Optionally asserts that these match the specified assertion.
+
+``selector`` Selector from which the info is to be retrieved.
+See the `Finding elements` section for details about the selectors.
+
+``assertion_operator`` See `Assertions` for further details. Defaults to None.
+
+Example:
+
+| `Get Select Options`     //select[2]    validate  [v["label"] for v in value] == ["Email", "Mobile"]
+| `Get Select Options`   select#names     validate  any(v["label"] == "Mikko" for v in value)</doc>
+<tags>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+</kw>
+<kw name="Get Selected Options" source="C:\Python\Lib\site-packages\Browser\keywords\getters.py" lineno="408">
+<arguments>
+<arg>selector: str</arg>
+<arg>option_attribute: SelectAttribute { value | label | text | index } = SelectAttribute.label</arg>
+<arg>assertion_operator: AssertionOperator { equal | == | should be | inequal | ... } = None</arg>
+<arg>*assertion_expected</arg>
+</arguments>
+<doc>Returns the specified attribute of selected options of the ``select`` element.
+
+Optionally asserts that these match the specified assertion.
+
+``selector`` Selector from which the info is to be retrieved.
+See the `Finding elements` section for details about the selectors.
+
+``option_attribute`` Which attribute shall be returned/verified.
+Defaults to label.
+
+``assertion_operator`` See `Assertions` for further details. Defaults to None.
+
+- ``==`` and ``!=`` can work with multiple values
+- ``contains`` / ``*=`` only accepts one single expected value
+
+Other operators are not allowed.
+
+Example:
+
+| `Select Options By`      label                    //select[2]    Email      Mobile
+| ${selected_list}         `Get Selected Options`   //select[2]                                         # getter
+| `Get Selected Options`   //select[2]              label          `==`       Mobile             Mail   #assertion content
+| `Select Options By`      label                    select#names   2          4
+| `Get Selected Options`   select#names             index          `==`       2                  4      #assertion index
+| `Get Selected Options`   select#names             label          *=         Mikko                     #assertion contain
+| `Get Selected Options`   select#names             label          validate   len(value) == 3           #assertion length</doc>
+<tags>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+</kw>
+<kw name="Get Style" source="C:\Python\Lib\site-packages\Browser\keywords\getters.py" lineno="637">
+<arguments>
+<arg>selector: str</arg>
+<arg>key: str = ALL</arg>
+<arg>assertion_operator: AssertionOperator { equal | == | should be | inequal | ... } = None</arg>
+<arg>assertion_expected: typing.Any = None</arg>
+<arg>message: str = None</arg>
+</arguments>
+<doc>Gets the computed style properties of the element selected by ``selector``.
+
+Optionally matches with any sequence assertion operator.
+
+``selector`` Selector from which the style shall be retrieved.
+See the `Finding elements` section for details about the selectors.
+
+``key`` Key of the requested CSS property. Retrieves "ALL" styles by default.
+
+See `Assertions` for further details for the assertion arguments. Defaults to None.
+
+``message`` overrides the default error message.</doc>
+<tags>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+</kw>
+<kw name="Get Text" source="C:\Python\Lib\site-packages\Browser\keywords\getters.py" lineno="148">
+<arguments>
+<arg>selector: str</arg>
+<arg>assertion_operator: AssertionOperator { equal | == | should be | inequal | ... } = None</arg>
+<arg>assertion_expected: typing.Any = None</arg>
+<arg>message: str = None</arg>
+</arguments>
+<doc>Returns text attribute of the element found by ``selector``.
+See the `Finding elements` section for details about the selectors.
+
+Optionally asserts that the text matches the specified assertion.
+
+See `Assertions` for further details for the assertion arguments. Defaults to None.
+
+``message`` overrides the default error message.</doc>
+<tags>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+</kw>
+<kw name="Get Textfield Value" deprecated="true" source="C:\Python\Lib\site-packages\Browser\keywords\getters.py" lineno="343">
+<arguments>
+<arg>selector: str</arg>
+<arg>assertion_operator: AssertionOperator { equal | == | should be | inequal | ... } = None</arg>
+<arg>assertion_expected: typing.Any = None</arg>
+<arg>message: str = None</arg>
+</arguments>
+<doc>*DEPRECATED!!* Use keyword `Get Text` instead.</doc>
+<tags>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+</kw>
+<kw name="Get Title" source="C:\Python\Lib\site-packages\Browser\keywords\getters.py" lineno="124">
+<arguments>
+<arg>assertion_operator: AssertionOperator { equal | == | should be | inequal | ... } = None</arg>
+<arg>assertion_expected: typing.Any = None</arg>
+<arg>message: str = None</arg>
+</arguments>
+<doc>Returns the title of the current page.
+
+Optionally asserts that it matches the specified assertion.
+
+See `Assertions` for further details for the assertion arguments. Defaults to None.
+
+``message`` overrides the default error message.</doc>
+<tags>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+</kw>
+<kw name="Get Url" source="C:\Python\Lib\site-packages\Browser\keywords\getters.py" lineno="45">
+<arguments>
+<arg>assertion_operator: AssertionOperator { equal | == | should be | inequal | ... } = None</arg>
+<arg>assertion_expected: typing.Any = None</arg>
+<arg>message: str = None</arg>
+</arguments>
+<doc>Returns the current URL.
+
+Optionally asserts that it matches the specified assertion.
+
+See `Assertions` for further details for the assertion arguments. Defaults to None.
+
+``message`` overrides the default error message.</doc>
+<tags>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+</kw>
+<kw name="Get Viewport Size" source="C:\Python\Lib\site-packages\Browser\keywords\getters.py" lineno="551">
+<arguments>
+<arg>key: SizeFields { width | height | ALL } = SizeFields.ALL</arg>
+<arg>assertion_operator: AssertionOperator { equal | == | should be | inequal | ... } = None</arg>
+<arg>assertion_expected: typing.Any = None</arg>
+<arg>message: str = None</arg>
+</arguments>
+<doc>Returns the current viewport dimensions.
+
+Optionally asserts that the count matches the specified assertion.
+
+``key`` Optionally filters the returned values.
+If keys is set to ``ALL`` (default) it will return the viewport size as dictionary,
+otherwise it will just return the single value selected by the key.
+Note: If a single value is retrieved, an assertion does *not* need a ``validate``
+combined with a cast of ``value``.
+
+``message`` overrides the default error message.
+
+See `Assertions` for further details for the assertion arguments. Defaults to None.
+
+Example:
+| Get Viewport Size    ALL    ==    {'width':1280, 'height':720}
+| Get Viewport Size    width    &gt;=    1200</doc>
+<tags>
+<tag>Assertion</tag>
+<tag>BrowserControl</tag>
+<tag>Getter</tag>
+</tags>
+</kw>
+<kw name="Go Back" source="C:\Python\Lib\site-packages\Browser\keywords\browser_control.py" lineno="40">
+<arguments>
+</arguments>
+<doc>Navigates to the previous page in history.</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Go Forward" source="C:\Python\Lib\site-packages\Browser\keywords\browser_control.py" lineno="33">
+<arguments>
+</arguments>
+<doc>Navigates to the next page in history.</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Go To" source="C:\Python\Lib\site-packages\Browser\keywords\browser_control.py" lineno="47">
+<arguments>
+<arg>url: str</arg>
+<arg>timeout: timedelta = None</arg>
+</arguments>
+<doc>Navigates to the given ``url``.
+
+``url`` &lt;str&gt; URL to be navigated to.
+``timeout`` &lt;str&gt; time to wait page to load. If not defined
+will use the the library default timeout.</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Handle Future Dialogs" source="C:\Python\Lib\site-packages\Browser\keywords\interaction.py" lineno="582">
+<arguments>
+<arg>action: DialogAction { accept | dismiss }</arg>
+<arg>prompt_input: str = </arg>
+</arguments>
+<doc>Handle next dialog on page with ``action``.
+
+Dialog can be any of alert, beforeunload, confirm or prompt. Handling dialogue
+must be called before the action, like example click, that triggers the
+dialogue.
+
+If a handler is not set dialogs are dismissed by default.
+
+    ``action`` How to handle the alert.
+
+    ``prompt_input`` The value to enter into prompt. Only valid if
+    ``action`` equals accept. Defaults to empty string.
+
+Example:
+
+| Handle Future Dialogs    action=accept
+| Click                    \#alerts</doc>
+<tags>
+<tag>PageContent</tag>
+</tags>
+</kw>
+<kw name="Highlight Elements" source="C:\Python\Lib\site-packages\Browser\keywords\evaluation.py" lineno="51">
+<arguments>
+<arg>selector: str</arg>
+<arg>duration: timedelta = 0:00:05</arg>
+<arg>width: str = 2px</arg>
+<arg>style: str = dotted</arg>
+<arg>color: str = blue</arg>
+</arguments>
+<doc>Adds a highlight to elements matched by the ``selector``. Provides a style adjustment.
+
+``selector`` Selectors which shall be highlighted.
+See the `Finding elements` section for details about the selectors.
+
+``duration`` Sets for how long the selector shall be highlighted. Defaults to ``5s`` =&gt; 5 seconds.
+
+``width`` Sets the width of the higlight border. Defaults to 2px.
+
+``style`` Sets the style of the border. Defaults to dotted.
+
+``color`` Sets the color of the border. Valid colors i.e. are:
+``red``, ``blue``, ``yellow``, ``pink``, ``black``</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Hover" source="C:\Python\Lib\site-packages\Browser\keywords\interaction.py" lineno="332">
+<arguments>
+<arg>selector: str</arg>
+<arg>position_x: float = None</arg>
+<arg>position_y: float = None</arg>
+<arg>force: bool = False</arg>
+<arg>*modifiers: KeyboardModifier { Alt | Control | Meta | Shift }</arg>
+</arguments>
+<doc>Moves the virtual mouse and scrolls to the element found by ``selector``.
+
+This method hovers over an element matching ``selector`` by performing the following steps:
+- Find an element match matching ``selector``. If there is none, wait until a matching element is attached to the DOM.
+- Wait for actionability checks on the matched element, unless ``force`` option is set. If the element is detached during the checks, the whole action is retried.
+- Scroll the element into view if needed.
+- Use `Mouse Move` to hover over the center of the element, or the specified ``position``.
+
+``selector`` Selector element to hover.
+See the `Finding elements` section for details about the selectors.
+
+``position_x`` &amp; ``position_y`` A point to hover relative to the top-left corner of element bounding box.
+If not specified, hovers over some visible point of the element.
+Only positive values within the bounding-box are allowed.
+
+``force`` Set to True to skip Playwright's [https://playwright.dev/docs/actionability | Actionability checks].
+
+``*modifiers`` Modifier keys to press. Ensures that only these modifiers are
+pressed during the hover, and then restores current modifiers back.
+If not specified, currently pressed modifiers are used.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Http" source="C:\Python\Lib\site-packages\Browser\keywords\network.py" lineno="60">
+<arguments>
+<arg>url: str</arg>
+<arg>method: RequestMethod { HEAD | GET | POST | PUT | PATCH | DELETE } = RequestMethod.GET</arg>
+<arg>body: str = None</arg>
+<arg>headers: dict = None</arg>
+</arguments>
+<doc>Performs an HTTP request in the current browser context
+
+Accepts the following arguments:
+  - ``url`` The request url, e.g. ``/api/foo``.
+  - ``method`` The HTTP method for the request. Defaults to GET.
+  - ``body`` The request body. GET requests cannot have a body. If the body can be parsed as JSON,
+  the ``Content-Type`` header for the request will be automatically set to ``application/json``.
+  Defaults to None.
+  - ``headers`` A dictionary of additional request headers. Defaults to None.
+
+The response is a Python dictionary with following attributes:
+  - ``status`` &lt;int&gt; The status code of the response.
+  - ``statusText`` &lt;str&gt; Status text corresponding to ``status``, e.g OK or INTERNAL SERVER ERROR.
+  - ``body`` &lt;dict&gt; | &lt;str&gt; The response body. If the body can be parsed as a JSON obejct,
+  it will be returned as Python dictionary, otherwise it is returned as a string.
+  - ``headers`` &lt;dict&gt; A dictionary containing all response headers.
+  - ``ok`` &lt;bool&gt; Whether the request was successfull, i.e. the ``status`` is range 200-299.
+
+Here's an example of using Robot Framework dictionary variables and extended variable syntax to
+do assertions on the response object:
+
+| &amp;{res}=             HTTP                       /api/endpoint
+| Should Be Equal     ${res.status}              200
+| Should Be Equal     ${res.body.some_field}     some value</doc>
+<tags>
+<tag>HTTP</tag>
+</tags>
+</kw>
+<kw name="Keyboard Input" source="C:\Python\Lib\site-packages\Browser\keywords\interaction.py" lineno="796">
+<arguments>
+<arg>action: KeyboardInputAction { insertText | type }</arg>
+<arg>input: str</arg>
+<arg>delay=0</arg>
+</arguments>
+<doc>Input text into page with virtual keyboard.
+
+``action``
+
+    - ``insertText`` Dispatches only input event, does not emit the keydown, keyup or keypress events.
+
+    - ``type`` Sends a keydown, keypress/input, and keyup event for each character in the text.
+
+``input`` The inputstring to be typed. No special keys possible.
+
+Note: To press a special key, like Control or ArrowDown, use keyboard.press.
+Modifier keys DO NOT effect these methods. For testing modifier effects use single key
+presses with ``Keyboard Key  press``</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Keyboard Key" source="C:\Python\Lib\site-packages\Browser\keywords\interaction.py" lineno="762">
+<arguments>
+<arg>action: KeyAction { down | up | press }</arg>
+<arg>key: str</arg>
+</arguments>
+<doc>Press a keyboard key on the virtual keyboard or set a key up or down.
+
+``action`` Determine whether the key should be released,
+hold or pressed. ``down`` or ``up`` are useful for combinations i.e. with Shift.
+
+
+``key`` The key to be pressed. An example of valid keys are:
+
+``F1`` - ``F12``, ``Digit0`` - ``Digit9``, ``KeyA`` - ``KeyZ``, ``Backquote``, ``Minus``,
+``Equal``, ``Backslash``, ``Backspace``, ``Tab``, ``Delete``, ``Escape``, ``ArrowDown``,
+``End``, ``Enter``, ``Home``, ``Insert``, ``PageDown``, ``PageUp``, ``ArrowRight``, ``ArrowUp``
+, etc.
+
+Useful keys for ``down`` and ``up`` for example are:
+
+``Shift``, ``Control``, ``Alt``, ``Meta``, ``ShiftLeft``
+
+Example excecution:
+| Keyboard Key    press    S
+| Keyboard Key    down     Shift
+| Keyboard Key    press    ArrowLeft
+| Keyboard Key    press    Delete
+| Keyboard Key    up       Shift
+
+Note: Capital letters don't need to be written by the help of Shift. You can type them in directly.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="LocalStorage Clear" source="C:\Python\Lib\site-packages\Browser\keywords\webapp_state.py" lineno="89">
+<arguments>
+</arguments>
+<doc>Remove all saved data from the local storage.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="LocalStorage Get Item" source="C:\Python\Lib\site-packages\Browser\keywords\webapp_state.py" lineno="29">
+<arguments>
+<arg>key: str</arg>
+<arg>assertion_operator: AssertionOperator { equal | == | should be | inequal | ... } = None</arg>
+<arg>assertion_expected: typing.Any = None</arg>
+<arg>message: str = None</arg>
+</arguments>
+<doc>Get saved data from the local storage.
+
+``key`` Named key of the item in the storage.
+
+See `Assertions` for further details for the assertion arguments. Defaults to None.</doc>
+<tags>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+</kw>
+<kw name="LocalStorage Remove Item" source="C:\Python\Lib\site-packages\Browser\keywords\webapp_state.py" lineno="74">
+<arguments>
+<arg>key: str</arg>
+</arguments>
+<doc>Remove saved data with key from the local storage.
+
+``key`` Name of the item which shall be deleted.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="LocalStorage Set Item" source="C:\Python\Lib\site-packages\Browser\keywords\webapp_state.py" lineno="57">
+<arguments>
+<arg>key: str</arg>
+<arg>value: str</arg>
+</arguments>
+<doc>Save data to the local storage.
+
+``key`` The name of the key under which it should be saved.
+
+``value`` The value which shall be saved as a string.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Mouse Button" source="C:\Python\Lib\site-packages\Browser\keywords\interaction.py" lineno="611">
+<arguments>
+<arg>action: MouseButtonAction { click | down | up }</arg>
+<arg>x: float = None</arg>
+<arg>y: float = None</arg>
+<arg>button: MouseButton { left | middle | right } = MouseButton.left</arg>
+<arg>clickCount: int = 1</arg>
+<arg>delay: int = 0</arg>
+</arguments>
+<doc>Clicks, presses or releases a mouse button.
+
+
+``action`` Determines if it is a mouseclick, holding down a key or releasing it.
+
+``x`` and ``y`` Coordinates to move before.
+
+``button`` Defaults to ``left``.
+
+``clickCount`` Determine how often shall be clicked. Defaults to 1.
+
+``delay`` Delay in ms between the mousedown and mouseup event.
+Can only be set if the action is click.
+
+Moving the mouse between holding down and releasing it, is possible with `Mouse Move`.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Mouse Move" source="C:\Python\Lib\site-packages\Browser\keywords\interaction.py" lineno="746">
+<arguments>
+<arg>x: float</arg>
+<arg>y: float</arg>
+<arg>steps: int = 1</arg>
+</arguments>
+<doc>Instead of selectors command mouse with coordinates.
+The Click commands will leave the virtual mouse on the specified coordinates.
+
+``x`` ``y`` are absolute coordinates starting at the top left
+of the page.
+
+``steps`` Number of intermediate steps for the mouse event.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Mouse Move Relative To" source="C:\Python\Lib\site-packages\Browser\keywords\interaction.py" lineno="717">
+<arguments>
+<arg>selector: str</arg>
+<arg>x: float = 0.0</arg>
+<arg>y: float = 0.0</arg>
+<arg>steps: int = 1</arg>
+</arguments>
+<doc>Moves the mouse cursor relative to the selected element.
+
+``x`` ``y`` are relative coordinates to the center of the elements bounding box.
+
+``steps`` Number of intermediate steps for the mouse event.
+This is sometime needed for websites to recognize the movement.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="New Browser" source="C:\Python\Lib\site-packages\Browser\keywords\playwright_state.py" lineno="268">
+<arguments>
+<arg>browser: SupportedBrowsers { chromium | firefox | webkit } = SupportedBrowsers.chromium</arg>
+<arg>headless: bool = True</arg>
+<arg>executablePath: str = None</arg>
+<arg>args: typing.List[str] = None</arg>
+<arg>ignoreDefaultArgs: typing.List[str] = None</arg>
+<arg>proxy: Proxy = None</arg>
+<arg>downloadsPath: str = None</arg>
+<arg>handleSIGINT: bool = True</arg>
+<arg>handleSIGTERM: bool = True</arg>
+<arg>handleSIGHUP: bool = True</arg>
+<arg>timeout: timedelta = 0:00:30</arg>
+<arg>env: typing.Dict = None</arg>
+<arg>devtools: bool = False</arg>
+<arg>slowMo: timedelta = 0:00:00</arg>
+<arg>channel: str = None</arg>
+</arguments>
+<doc>Create a new playwright Browser with specified options.
+See `Browser, Context and Page` for more information about Browser and related concepts.
+
+Returns a stable identifier for the created browser.
+
+``browser`` Opens the specified browser. Defaults to chromium.
+
+``headless`` Set to False if you want a GUI. Defaults to False.
+
+``executablePath`` Path to a browser executable to run instead of the bundled one.
+If executablePath is a relative path, then it is resolved relative to current working
+directory. Note that Playwright only works with the bundled Chromium, Firefox or
+WebKit, use at your own risk. Defaults to None.
+
+``args`` Additional arguments to pass to the browser instance. The list of
+Chromium flags can be found [http://peter.sh/experiments/chromium-command-line-switches/ | here].
+Defaults to None.
+
+``ignoreDefaultArgs`` If an array is given, then filters out the given default arguments.
+Defaults to None.
+
+``proxy`` Network proxy settings.
+- server &lt;string&gt; Proxy to be used for all requests. HTTP and SOCKS proxies are supported, for example ``http://myproxy.com:3128`` or ``socks5://myproxy.com:3128``. Short form ``myproxy.com:3128`` is considered an HTTP proxy.
+- bypass &lt;string&gt; Optional coma-separated domains to bypass proxy, for example ``".com, chromium.org, .domain.com"``.
+- username &lt;string&gt; Optional username to use if HTTP proxy requires authentication.
+- password &lt;string&gt; Optional password to use if HTTP proxy requires authentication.
+
+``downloadsPath`` If specified, accepted downloads are downloaded into this folder.
+Otherwise, temporary folder is created and is deleted when browser is closed.
+
+``handleSIGINT`` Close the browser process on Ctrl-C. Defaults to True.
+
+``handleSIGTERM`` Close the browser process on SIGTERM. Defaults to True.
+
+``handleSIGHUP`` Close the browser process on SIGHUP. Defaults to True.
+
+``timeout`` Maximum time in milliseconds to wait for the browser instance to start.
+Defaults to 30000 (30 seconds). Pass 0 to disable timeout.
+
+``env`` &lt;Dict&lt;str, str|int|bool&gt;&gt; Specify environment variables that will
+be visible to the browser. Defaults to None.
+
+``devtools`` Chromium-only Whether to auto-open a Developer Tools panel for each tab.
+If this option is true, the headless option will be set false.
+
+``slowMo`` Slows down Playwright operations by the specified amount of milliseconds.
+Useful so that you can see what is going on. Defaults to no delay.
+
+``channel`` Allows to operate against the stock Google Chrome and Microsoft Edge browsers.
+For more details see:
+[https://playwright.dev/docs/browsers/#google-chrome--microsoft-edge|Playwright documentation].</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="New Context" source="C:\Python\Lib\site-packages\Browser\utils\deprecated.py" lineno="366">
+<arguments>
+<arg>acceptDownloads: bool = False</arg>
+<arg>ignoreHTTPSErrors: bool = False</arg>
+<arg>bypassCSP: bool = False</arg>
+<arg>viewport: ViewportDimensions = None</arg>
+<arg>userAgent: str = None</arg>
+<arg>deviceScaleFactor: float = 1.0</arg>
+<arg>isMobile: bool = False</arg>
+<arg>hasTouch: bool = False</arg>
+<arg>javaScriptEnabled: bool = True</arg>
+<arg>timezoneId: str = None</arg>
+<arg>geolocation: GeoLocation = None</arg>
+<arg>locale: str = None</arg>
+<arg>permissions: typing.List[str] = None</arg>
+<arg>extraHTTPHeaders: typing.Dict[str, str] = None</arg>
+<arg>offline: bool = False</arg>
+<arg>httpCredentials: HttpCredentials = None</arg>
+<arg>colorScheme: ColorScheme { dark | light | no-preference } = None</arg>
+<arg>proxy: Proxy = None</arg>
+<arg>videosPath: str = None</arg>
+<arg>videoSize: ViewportDimensions = None</arg>
+<arg>defaultBrowserType: SupportedBrowsers { chromium | firefox | webkit } = None</arg>
+<arg>hideRfBrowser: bool = False</arg>
+<arg>recordVideo: RecordVideo = None</arg>
+<arg>recordHar: RecordHar = None</arg>
+</arguments>
+<doc>Create a new BrowserContext with specified options.
+See `Browser, Context and Page` for more information about BrowserContext.
+
+Returns a stable identifier for the created context
+that can be used in `Switch Context`.
+
+``acceptDownloads`` Whether to automatically downloads all the attachments.
+Defaults to False where all the downloads are canceled.
+
+``ignoreHTTPSErrors`` Whether to ignore HTTPS errors during navigation.
+Defaults to False.
+
+``bypassCSP`` Toggles bypassing page's Content-Security-Policy. Defaults to False.
+
+``viewport`` Sets a consistent viewport for each page.
+Defaults to an ``{'width': 1280, 'height': 720}`` viewport.
+Value of ``viewport`` can be a dict or a string
+representation of a dictionary.
+
+``userAgent`` Specific user agent to use in this context.
+
+``deviceScaleFactor`` Specify device scale factor
+(can be thought of as dpr). Defaults to 1.
+
+``isMobile`` Whether the meta viewport tag is taken into account
+and touch events are enabled. Defaults to False. Not supported in Firefox.
+
+``hasTouch`` Specifies if viewport supports touch events. Defaults to False.
+
+``javaScriptEnabled`` Whether or not to enable JavaScript in the context.
+Defaults to True.
+
+``timezoneId`` Changes the timezone of the context.
+See [https://source.chromium.org/chromium/chromium/src/+/master:third_party/icu/source/data/misc/metaZones.txt | ICU’s metaZones.txt]
+for a list of supported timezone IDs.
+
+``geolocation`` Sets the geolocation. No location is set by default.
+- ``latitude`` &lt;number&gt; Latitude between -90 and 90.
+- ``longitude`` &lt;number&gt; Longitude between -180 and 180.
+- ``accuracy`` Optional &lt;number&gt; Non-negative accuracy value. Defaults to 0.
+Example usage: ``{'latitude': 59.95, 'longitude': 30.31667}``
+
+``locale`` Specify user locale, for example ``en-GB``, ``de-DE``, etc.
+Locale will affect ``navigator.language`` value, ``Accept-Language`` request header value
+as well as number and date formatting rules.
+
+``permissions`` A list of permissions to grant to all pages in this context.
+See [https://playwright.dev/docs/api/class-browsercontext#browsercontextgrantpermissionspermissions-options| grantPermissions]
+for more details.
+
+``extraHTTPHeaders`` A dictionary containing additional HTTP headers
+to be sent with every request. All header values must be strings.
+
+``offline`` Whether to emulate network being offline. Defaults to False.
+
+``httpCredentials`` Credentials for
+[https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication|HTTP authentication].
+- example: ``{'username': 'admin', 'password': '123456'}``
+- ``username``
+- ``password``
+
+``colorScheme`` Emulates 'prefers-colors-scheme'
+media feature, supported values are 'light', 'dark', 'no-preference'.
+See [https://playwright.dev/docs/api/class-page#pageemulatemediaparams|emulateMedia(options)]
+for more details. Defaults to ``light``.
+
+``proxy`` Network proxy settings to use with this context.
+Note that browser needs to be launched with the global proxy for this option to work.
+If all contexts override the proxy, global proxy will be never used and can be any string
+
+``videosPath`` is deprecated by playwright, use recordVideo instead.
+Enables video recording for all pages to videosPath
+folder. If videosPath is not existing folder, videosPath folder is created
+under ${OUTPUT_DIR}/browser/video/ folder. If videosPath is not specified,
+videos are not recorded.
+
+``videoSize`` is deprecated by playwright, use recordVideo instead.
+Specifies dimensions of the automatically recorded
+video. Can only be used if videosPath is set. If not specified the size will
+be equal to viewport. If viewport is not configured explicitly the video size
+defaults to 1280x720. Actual picture of the page will be scaled down if
+necessary to fit specified size.
+- Example {"width": 1280, "height": 720}
+
+``defaultBrowserType`` If no browser is open and `New Context` opens a new browser
+with defaults, it now uses this setting.
+Very useful together with `Get Device` keyword:
+
+``recordVideo`` enables video recording for all pages into a folder. If not
+specified videos are not recorded. Make sure to close context for videos to be saved.
+``recordVideo`` is dictionary containing `dir` and `size` keys. If `dir` is not
+existing folder, videosPath folder is created under
+${OUTPUT_DIR}/browser/video/ folder. `size` Optional dimensions of the recorded
+videos. If not specified the size will be equal to viewport. If viewport is not
+configured explicitly the video size defaults to 1280x720. Actual picture of
+each page will be scaled down if necessary to fit the specified size.
+`size` is dictionary containing `width` (Video frame width) and  `height`
+(Video frame height) keys.
+
+``recordHar`` Enables [http://www.softwareishard.com/blog/har-12-spec/|HAR] recording
+for all pages into to a file. Must be path to file, example ${OUTPUT_DIR}/har.file.
+If not specified, the HAR is not recorded. Make sure to await context to close for the
+to be saved.
+
+`omitContent`: Optional setting to control whether to omit request content
+from the HAR. Default is False `path`: Path on the filesystem to write the HAR file to.
+
+The ${OUTPUTDIR}/browser/ is removed at the first suite startup.
+
+Example:
+| Test an iPhone
+|     ${device}=    `Get Device`    iPhone X
+|     `New Context`    &amp;{device}        # unpacking here with &amp;
+|     `New Page`    http://example.com
+
+A BrowserContext is the Playwright object that controls a single browser profile.
+Within a context caches and cookies are shared.
+See [https://playwright.dev/docs/api/class-browser#browsernewcontextoptions|Playwright browser.newContext]
+for a list of supported options.
+
+If there's no open Browser this keyword will open one. Does not create pages.</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="New Page" source="C:\Python\Lib\site-packages\Browser\keywords\playwright_state.py" lineno="578">
+<arguments>
+<arg>url: str = None</arg>
+</arguments>
+<doc>Open a new Page. A Page is the Playwright equivalent to a tab.
+See `Browser, Context and Page` for more information about Page concept.
+Returns a stable identifier for the created page.
+
+When a `New Page` is called without an open browser, `New Browser`
+and `New Context` are executed with default values first.
+
+``url`` If specified it will open the new page to the specified URL.</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Open Browser" source="C:\Python\Lib\site-packages\Browser\keywords\playwright_state.py" lineno="63">
+<arguments>
+<arg>url: str = None</arg>
+<arg>browser: SupportedBrowsers { chromium | firefox | webkit } = SupportedBrowsers.chromium</arg>
+<arg>headless: bool = False</arg>
+<arg>pause_on_failure: bool = True</arg>
+</arguments>
+<doc>Opens a new browser instance. Use this keyword for quick experiments or debugging sessions.
+Use `New Page` directly instead of `Open Browser` for production and automated execution.
+See `Browser, Context and Page` for more information about Browser and related concepts.
+
+Creates a new browser, context and page with specified settings.
+    Only supports some of the settings Create _ Keywords do
+
+``url`` Navigates to URL if provided. Defaults to None.
+
+``browser`` Specifies which browser to use. The
+supported browsers are listed in the table below. The browser names
+are case-sensitive.
+|   = Value =     |        = Name(s) =                                   |
+| firefox         | [https://www.mozilla.org/en-US/firefox/new|Firefox]  |
+| chromium        | [https://www.chromium.org/Home|Chromium]             |
+| webkit          | [https://webkit.org/|webkit]                         |
+
+``headless`` If set to False, a GUI is provided otherwise it is hidden. Defaults to False.
+
+``pause_on_failure`` Stop execution when failure detected and leave browser open. Defaults to True.</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Press Keys" source="C:\Python\Lib\site-packages\Browser\keywords\interaction.py" lineno="229">
+<arguments>
+<arg>selector: str</arg>
+<arg>*keys: str</arg>
+</arguments>
+<doc>Types the given key combination into element found by ``selector``.
+
+``selector`` Selector of the text field.
+See the `Finding elements` section for details about the selectors.
+
+Supports values like "a, b" which will be automatically typed.
+.
+Also supports identifiers for keys like ``ArrowLeft`` or ``Backspace``.
+Using + to chain combine modifiers with a single keypress
+``Control+Shift+T`` is supported.
+
+See playwright's documentation for a more comprehensive list of
+supported input keys.
+[https://playwright.dev/docs/api/class-page#pagepressselector-key-options | Playwright docs for press.]
+
+Example:
+
+| # Keyword       Selector                    *Keys
+| Press Keys      //*[@id="username_field"]    h    e   l   o   ArrowLeft   l</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Promise To" source="C:\Python\Lib\site-packages\Browser\keywords\promises.py" lineno="35">
+<arguments>
+<arg>kw: str</arg>
+<arg>*args</arg>
+</arguments>
+<doc>Wrap a Browser library keyword and make it a promise.
+Returns that promise and executes the keyword on background.
+
+``kw`` Keyword that will work async on background.
+
+Example:
+| ${promise}=     Promise To            Wait For Response     matcher=     timeout=3
+| Click           \#delayed_request
+| ${body}=        Wait For              ${promise}</doc>
+<tags>
+<tag>Wait</tag>
+</tags>
+</kw>
+<kw name="Promise To Upload File" source="C:\Python\Lib\site-packages\Browser\keywords\promises.py" lineno="140">
+<arguments>
+<arg>path: PathLike</arg>
+</arguments>
+<doc>Returns a promise that resolves when file from ``path`` has been uploaded.
+Fails if the upload has not happened during timeout.
+
+Upload file from ``path`` into next file chooser dialog on page.
+
+``path`` Path to file to be uploaded.
+
+Example use:
+
+| ${promise}=  Promise To Upload File    ${CURDIR}/test_upload_file
+| Click          \#file_chooser
+| ${upload_result}=  Wait For  ${promise}</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Promise To Wait For Download" source="C:\Python\Lib\site-packages\Browser\keywords\promises.py" lineno="63">
+<arguments>
+<arg>saveAs: str = </arg>
+</arguments>
+<doc>Returns a promise that waits for next download event on page.
+
+To enable downloads context's ``acceptDownloads`` needs to be true.
+
+With default filepath downloaded files are deleted when Context the download happened in is closed.
+
+``saveAs`` defines path where the file is saved. File will also temporarily be saved in playwright context's
+default download location.
+
+Waited promise returns a dictionary which contains saveAs and suggestedFilename as keys. The saveAs contains
+where the file is downloaded and suggestedFilename contains the name suggested name for the download.
+The suggestedFilename is typically computed by the browser from the Content-Disposition response header
+or the download attribute. See the spec on [https://html.spec.whatwg.org/#downloading-resources|whatwg].
+Different browsers can use different logic for computing it.
+
+Example usage:
+| New Context          acceptDownloads=True
+| New Page             ${LOGIN_URL}
+| ${dl_promise}        Promise To Wait For Download    /path/to/download/folder
+| Click                \#file_download
+| ${file_obj}=         Wait For  ${dl_promise}
+| File Should Exist    ${file_obj}[saveAs]
+| Should Be True       ${file_obj.suggestedFilename}</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Wait</tag>
+</tags>
+</kw>
+<kw name="Register Keyword To Run On Failure" source="C:\Python\Lib\site-packages\Browser\keywords\runonfailure.py" lineno="30">
+<arguments>
+<arg>keyword: typing.Union[str, NoneType]</arg>
+<arg>*args: str</arg>
+</arguments>
+<doc>Sets the keyword to execute, when a Browser keyword fails.
+
+``keyword`` is the name of a keyword that will be executed if a
+Browser keyword fails. It is possible to use any available
+keyword, including user keywords or keywords from other libraries,
+but the keyword must not take any arguments.
+
+``args`` are the arguments to the keyword if any.
+
+The initial keyword to use is set when `importing` the library, and
+the keyword that is used by default is `Take Screenshot`.
+Taking a screenshot when something failed is a very useful
+feature, but notice that it can slow down the execution.
+
+It is possible to use string ``NONE`` or any other robot falsy name,
+case-insensitively, as well as Python ``None`` to disable this
+feature altogether.
+
+This keyword returns the name of the previously registered
+failure keyword or Python ``None`` if this functionality was
+previously disabled. The return value can be always used to
+restore the original value later.
+
+Example:
+| `Register Keyword To Run On Failure`    Take Screenshot
+| ${previous kw}=    `Register Keyword To Run On Failure`    NONE
+| `Register Keyword To Run On Failure`    ${previous kw}</doc>
+<tags>
+<tag>Config</tag>
+</tags>
+</kw>
+<kw name="Reload" source="C:\Python\Lib\site-packages\Browser\keywords\browser_control.py" lineno="269">
+<arguments>
+</arguments>
+<doc>Reloads current active page.</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Scroll By" source="C:\Python\Lib\site-packages\Browser\keywords\interaction.py" lineno="436">
+<arguments>
+<arg>selector: str = None</arg>
+<arg>vertical: str = height</arg>
+<arg>horizontal: str = 0</arg>
+<arg>behavior: ScrollBehavior { auto | smooth } = ScrollBehavior.auto</arg>
+</arguments>
+<doc>Scrolls an element or the page relative from current position by the given values.
+
+``selector`` Selector of the element. If the selector is ``${None}`` or ``${Empty}``
+the page itself is scrolled. To ensure an element is in view use `Hover` instead.
+See the `Finding elements` section for details about the selectors.
+
+``vertical`` defines how far and in which direction to scroll vertically.
+It can be a positive or negative number. Positive scrolls down, like ``50``, negative scrolls up, like ``-50``.
+It can be a percentage value of the absolute scrollable size, like ``9.95%`` or negative like ``-10%``.
+It can be the string ``height`` to defining to scroll exactly one visible height down or up with ``-height``.
+_Be aware that some pages do lazy loading and load more content once you scroll down._
+The percentage of the current scrollable height is used and may change.
+
+``horizontal`` defines where to scroll horizontally.
+Works same as vertical but defines positive values for right and negative values for left.
+``width`` defines to scroll exactly one visible range to the right.
+
+``behavior`` defines whether the scroll happens directly or it scrolls smoothly.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Scroll To" source="C:\Python\Lib\site-packages\Browser\keywords\interaction.py" lineno="392">
+<arguments>
+<arg>selector: str = None</arg>
+<arg>vertical: str = top</arg>
+<arg>horizontal: str = left</arg>
+<arg>behavior: ScrollBehavior { auto | smooth } = ScrollBehavior.auto</arg>
+</arguments>
+<doc>Scrolls an element or the page to an absolute position based on given coordinates.
+
+``selector`` Selector of the element. If the selector is ``${None}`` or ``${Empty}``
+the page itself is scrolled. To ensure an element is in view use `Hover` instead.
+See the `Finding elements` section for details about the selectors.
+
+``vertical`` defines where to scroll vertically.
+It can be a positive number, like ``300``.
+It can be a percentage value of the absolute scrollable size, like ``50%``.
+It can be a string defining that top or the bottom of the scroll area. &lt; ``top`` | ``bottom`` &gt;
+_Be aware that some pages do lazy loading and load more content once you scroll down._
+Bottom defines the current known bottom coordinate.
+
+``horizontal`` defines where to scroll horizontally.
+Works same as vertical but defines &lt; ``left`` | ``right`` &gt; as start and end.
+
+``behavior`` defines whether the scroll happens directly or it scrolls smoothly.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Select Options By" source="C:\Python\Lib\site-packages\Browser\keywords\interaction.py" lineno="509">
+<arguments>
+<arg>selector: str</arg>
+<arg>attribute: SelectAttribute { value | label | text | index }</arg>
+<arg>*values</arg>
+</arguments>
+<doc>Selects options from select element found by ``selector``.
+
+``selector`` Selector of the select tag.
+See the `Finding elements` section for details about the selectors.
+
+Matches based on the chosen attribute with list of ``values``.
+Possible attributes to match options by:
+``attribute``
+
+If no values to select are passed will deselect options in element.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="SessionStorage Clear" source="C:\Python\Lib\site-packages\Browser\keywords\webapp_state.py" lineno="163">
+<arguments>
+</arguments>
+<doc>Remove all saved data from the session storage.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="SessionStorage Get Item" source="C:\Python\Lib\site-packages\Browser\keywords\webapp_state.py" lineno="103">
+<arguments>
+<arg>key: str</arg>
+<arg>assertion_operator: AssertionOperator { equal | == | should be | inequal | ... } = None</arg>
+<arg>assertion_expected: typing.Any = None</arg>
+</arguments>
+<doc>Get saved data from from session storage.
+
+``key`` Named key of the item in the storage.
+
+See `Assertions` for further details for the assertion arguments. Defaults to None.</doc>
+<tags>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+</kw>
+<kw name="SessionStorage Remove Item" source="C:\Python\Lib\site-packages\Browser\keywords\webapp_state.py" lineno="148">
+<arguments>
+<arg>key: str</arg>
+</arguments>
+<doc>Remove saved data with key from the session storage.
+
+``key`` Name of the item which shall be deleted.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="SessionStorage Set Item" source="C:\Python\Lib\site-packages\Browser\keywords\webapp_state.py" lineno="131">
+<arguments>
+<arg>key: str</arg>
+<arg>value: str</arg>
+</arguments>
+<doc>Save data to session storage.
+
+``key`` The name of the key under which it should be saved.
+
+``value`` The value which shall be saved as a string.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Set Browser Timeout" source="C:\Python\Lib\site-packages\Browser\keywords\browser_control.py" lineno="184">
+<arguments>
+<arg>timeout: timedelta</arg>
+</arguments>
+<doc>Sets the timeout used by most input and getter keywords.
+
+``timeout`` Timeout of it is for current playwright context.
+
+Returns the previous value of the timeout.</doc>
+<tags>
+<tag>Config</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Set Geolocation" source="C:\Python\Lib\site-packages\Browser\keywords\browser_control.py" lineno="252">
+<arguments>
+<arg>latitude: float</arg>
+<arg>longitude: float</arg>
+<arg>accuracy: float = None</arg>
+</arguments>
+<doc>Updated the correct Context's geolocation.
+
+Latitude can be between -90 and 90 and longitude can be between -180 and 180.</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Set Offline" source="C:\Python\Lib\site-packages\Browser\keywords\browser_control.py" lineno="241">
+<arguments>
+<arg>offline: bool = True</arg>
+</arguments>
+<doc>Toggles current Context's offline emulation.
+
+``offline`` Toggles the offline mode. Set to False to switch back
+to online mode. Defaults to True.</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Set Retry Assertions For" source="C:\Python\Lib\site-packages\Browser\keywords\browser_control.py" lineno="205">
+<arguments>
+<arg>timeout: timedelta</arg>
+</arguments>
+<doc>Sets the timeout used in retrying assertions when they fail.
+
+``timeout``
+
+Returns the previous value of the retry_assertions_until.</doc>
+<tags>
+<tag>Config</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Set Viewport Size" source="C:\Python\Lib\site-packages\Browser\keywords\browser_control.py" lineno="217">
+<arguments>
+<arg>width: int</arg>
+<arg>height: int</arg>
+</arguments>
+<doc>Sets current Pages viewport size to specified dimensions.
+
+In the case of multiple pages in a single browser,
+each page can have its own viewport size. However,
+`New Context` allows to set viewport size (and more) for all
+later opened pages in the context at once.
+
+`Set Viewport Size` will resize the page.
+A lot of websites don't expect phones to change size,
+so you should set the viewport size before navigating to
+the page with `New Context` before opening the page itself.
+
+``width`` Sets the width size.
+
+``height`` Sets the heigth size.</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Switch Browser" source="C:\Python\Lib\site-packages\Browser\keywords\playwright_state.py" lineno="715">
+<arguments>
+<arg>id: str</arg>
+</arguments>
+<doc>Switches the currently active Browser to another open Browser.
+Returns a stable identifier for the previous browser.
+See `Browser, Context and Page` for more information about Browser and related concepts.
+
+``id`` Id of the browser to be changed to. Starting at 0.</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Switch Context" source="C:\Python\Lib\site-packages\Browser\keywords\playwright_state.py" lineno="728">
+<arguments>
+<arg>id: str</arg>
+<arg>browser: str = CURRENT</arg>
+</arguments>
+<doc>Switches the active BrowserContext to another open context.
+Returns a stable identifier for the previous context.
+See `Browser, Context and Page` for more information about Context and related concepts.
+
+``id`` Id of the context to be changed to. Randomly generated UUID.
+
+``browser`` &lt; ``CURRENT`` | str&gt; Switch context in specified browser. If value is not "CURRENT"
+it should be an the id of the browser where to switch context.</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Switch Page" source="C:\Python\Lib\site-packages\Browser\keywords\playwright_state.py" lineno="745">
+<arguments>
+<arg>id: str</arg>
+<arg>context: str = CURRENT</arg>
+<arg>browser: str = CURRENT</arg>
+</arguments>
+<doc>Switches the active browser page to another open page by ``id`` or ``NEW``.
+Returns a stable identifier ``id`` for the previous page.
+See `Browser, Context and Page` for more information about Page and related concepts.
+
+``id`` &lt; ``CURRENT`` | ``NEW `` | str&gt; Id of the page to be changed to or
+
+``NEW`` for a page opened after the current page. This may timeout if no new pages
+exists before library timeout. See `Set Browser Timeout` for how to change the timeout.
+
+With ``CURRENT`` you can get the ``id`` of the "CURRENT" page
+
+
+``context`` &lt; ``CURRENT`` | str&gt; Switch page in specified context. If value is not "CURRENT"
+it should be the id of the context where to switch page.
+
+``browser`` &lt; ``CURRENT`` | str&gt; Switch page in specified browser. If value is not "CURRENT"
+it should be the id of the browser where to switch page.</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Take Screenshot" source="C:\Python\Lib\site-packages\Browser\keywords\browser_control.py" lineno="81">
+<arguments>
+<arg>filename: str = robotframework-browser-screenshot-{index}</arg>
+<arg>selector: str = </arg>
+<arg>fullPage: bool = False</arg>
+<arg>fileType: ScreenshotFileTypes { png | jpeg } = ScreenshotFileTypes.png</arg>
+<arg>quality: str = </arg>
+<arg>timeout: timedelta = None</arg>
+</arguments>
+<doc>Takes a screenshot of the current window and saves it.
+
+``filename`` Filename into which to save. The file will be saved into the robot framework
+ ${OUTPUTDIR}/browser/screenshot directory by default, but it can overwritten by providing
+ custom path or filename. String ``{index}`` in filename will be replaced with a rolling
+ number. Use this to not override filenames. If filename equals to EMBED (case insensitive),
+ then screenshot is embedded as Base64 image to the log.html. The image is saved temporally
+ to the disk and warning is displayed if removing the temporary file fails.
+ If the filename is an absolute path, then filename is considered as an absolute path.
+
+ The ${OUTPUTDIR}/browser/ is removed at the first suite startup.
+
+``selector`` Take a screenshot of the element matched by selector.
+See the `Finding elements` section for details about the selectors.
+If not provided take a screenshot of current viewport.
+
+``fullPage`` When True, takes a screenshot of the full scrollable page,
+instead of the currently visible viewport. Defaults to False.
+
+``fileType`` &lt;"png"|"jpeg"&gt; Specify screenshot type, defaults to png.
+
+``quality`` The quality of the image, between 0-100. Not applicable to png images.
+
+``timeout`` Maximum time in milliseconds, defaults to 30 seconds, pass 0 to disable timeout.
+The default value can be changed by using the `Set Browser Timeout` keyword.</doc>
+<tags>
+<tag>PageContent</tag>
+</tags>
+</kw>
+<kw name="Type Secret" source="C:\Python\Lib\site-packages\Browser\keywords\interaction.py" lineno="119">
+<arguments>
+<arg>selector: str</arg>
+<arg>secret: str</arg>
+<arg>delay: timedelta = 0:00:00</arg>
+<arg>clear: bool = True</arg>
+</arguments>
+<doc>Types the given secret from ``variable_name`` into the text field
+found by ``selector``.
+
+This keyword does not log secret in Robot Framework logs.
+If ``enable_playwright_debug`` is enabled in the library
+import, secret will be always visible as plain text in the playwright debug
+logs, regardless of the Robot Framework log level.
+
+``selector`` Selector of the text field.
+See the `Finding elements` section for details about the selectors.
+
+``secret`` Environment variable name with % prefix or a local
+variable with $ prefix that has the secret text value.
+Variable names can be used with and without curly braces.
+
+Example:
+``$Password`` and ``${Password}`` resolve the robot framework variable.
+``%ENV_PWD`` and ``%{ENV_PWD}`` resolve to the environment variable ``ENV_PWD``.
+
+``delay`` Delay between the single key strokes. It may be either a
+number or a Robot Framework time string. Time strings are fully
+explained in an appendix of Robot Framework User Guide. Defaults to ``0 ms``.
+Example: ``50 ms``
+
+``clear`` Set to false, if the field shall not be cleared before typing.
+Defaults to true.
+
+See `Type Text` for details.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Type Text" source="C:\Python\Lib\site-packages\Browser\keywords\interaction.py" lineno="51">
+<arguments>
+<arg>selector: str</arg>
+<arg>txt: str</arg>
+<arg>delay: timedelta = 0:00:00</arg>
+<arg>clear: bool = True</arg>
+</arguments>
+<doc>Types the given ``txt`` into the text field found by ``selector``.
+
+Sends a ``keydown``, ``keypress/input``, and ``keyup`` event for each
+character in the text.
+
+``selector`` Selector of the text field.
+See the `Finding elements` section for details about the selectors.
+
+``txt`` Text for the text field.
+
+``delay`` Delay between the single key strokes. It may be either a
+number or a Robot Framework time string. Time strings are fully
+explained in an appendix of Robot Framework User Guide. Defaults to ``0 ms``.
+Example: ``50 ms``
+
+``clear`` Set to false, if the field shall not be cleared before typing.
+Defaults to true.
+
+See `Fill Text` for direct filling of the full text at once.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Uncheck Checkbox" source="C:\Python\Lib\site-packages\Browser\keywords\interaction.py" lineno="494">
+<arguments>
+<arg>selector: str</arg>
+</arguments>
+<doc>Unchecks the checkbox found by ``selector``.
+
+``selector`` Selector of the checkbox.
+See the `Finding elements` section for details about the selectors.
+
+Does nothing if the element is not checked/selected.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Upload File" deprecated="true" source="C:\Python\Lib\site-packages\Browser\keywords\promises.py" lineno="161">
+<arguments>
+<arg>path: PathLike</arg>
+</arguments>
+<doc>*DEPRECATED!!* Use keyword `Promise To Upload File` instead.
+Upload file from ``path`` into next file chooser dialog on page.
+
+``path`` Path to file to be uploaded.
+
+Example use:
+
+| Upload File    ${CURDIR}/test_upload_file
+| Click          \#file_chooser</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+</kw>
+<kw name="Wait For" source="C:\Python\Lib\site-packages\Browser\keywords\promises.py" lineno="113">
+<arguments>
+<arg>*promises: Future</arg>
+</arguments>
+<doc>Waits for promises to finish and returns results from them.
+Returns one result if one promise waited. Otherwise returns an array of results.
+If one fails, then this keyword will fail.
+
+``promises`` *Work in progress*
+
+Example:
+| ${promise}=     Promise To            Wait For Response     matcher=     timeout=3
+| Click           \#delayed_request
+| ${body}=        Wait For              ${promise}</doc>
+<tags>
+<tag>Wait</tag>
+</tags>
+</kw>
+<kw name="Wait For All Promises" source="C:\Python\Lib\site-packages\Browser\keywords\promises.py" lineno="132">
+<arguments>
+</arguments>
+<doc>Waits for all promises to finish.
+If one fails, then this keyword will fail.</doc>
+<tags>
+<tag>Wait</tag>
+</tags>
+</kw>
+<kw name="Wait For Download" deprecated="true" source="C:\Python\Lib\site-packages\Browser\keywords\promises.py" lineno="93">
+<arguments>
+<arg>saveAs: str = </arg>
+</arguments>
+<doc>*DEPRECATED!!* Use keyword `Promise To Wait For Download` instead.</doc>
+<tags>
+<tag>BrowserControl</tag>
+<tag>Wait</tag>
+</tags>
+</kw>
+<kw name="Wait For Elements State" source="C:\Python\Lib\site-packages\Browser\keywords\waiter.py" lineno="27">
+<arguments>
+<arg>selector: str</arg>
+<arg>state: ElementState { attached | detached | visible | ... } = ElementState.visible</arg>
+<arg>timeout: timedelta = None</arg>
+<arg>message: str = None</arg>
+</arguments>
+<doc>Waits for the element found by ``selector`` to satisfy state option.
+
+State options could be either appear/disappear from dom, or become visible/hidden.
+If at the moment of calling the keyword, the selector already satisfies the condition,
+the keyword will return immediately.
+
+If the selector doesn't satisfy the condition within the timeout the keyword will FAIL.
+
+``selector`` Selector of the corresponding object.
+See the `Finding elements` section for details about the selectors.
+
+``state`` See `ElementState` for explaination.
+
+Note that element without any content or with display:none has an empty bounding box
+and is not considered visible.
+
+``timeout`` uses default timeout of 10 seconds if not set.
+
+``message`` overrides the default error message. The ``message``
+argument accepts `{selector}`, `{function}`, and `{timeout}`
+[https://docs.python.org/3/library/stdtypes.html#str.format|format] options.
+The `{function}` formatter is same ``state`` argument value.</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+</tags>
+</kw>
+<kw name="Wait For Function" source="C:\Python\Lib\site-packages\Browser\keywords\waiter.py" lineno="116">
+<arguments>
+<arg>function: str</arg>
+<arg>selector: str = </arg>
+<arg>polling: typing.Union[str, datetime.timedelta] = raf</arg>
+<arg>timeout: timedelta = None</arg>
+<arg>message: str = None</arg>
+</arguments>
+<doc>Polls JavaScript expression or function in browser until it returns a
+(JavaScript) truthy value.
+
+``function`` A valid javascript function or a javascript function body. For example
+``() =&gt; true`` and ``true`` will behave similarly.
+
+``selector`` Selector to resolve and pass to the JavaScript function. This will be the first
+argument the function receives. If given a selector a function is necessary, with an argument
+to capture the elementhandle. For example ``(element) =&gt; document.activeElement === element``
+See the `Finding elements` section for details about the selectors.
+
+``polling`` Default polling value of "raf" polls in a callback for ``requestAnimationFrame``.
+Any other value for polling will be parsed as a robot framework time for interval between polls.
+
+``timeout`` Uses default timeout of 10 seconds if not set.
+
+``message`` overrides the default error message. The ``message``
+argument accepts `{selector}`, `{function}`, and `{timeout}`
+[https://docs.python.org/3/library/stdtypes.html#str.format|format] options.
+
+Example usage:
+| ${promise}    Promise To      Wait For Function    element =&gt; element.style.width=="100%"    selector=\#progress_bar    timeout=4s
+| Click         \#progress_bar
+| Wait For      ${promise}</doc>
+<tags>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+</tags>
+</kw>
+<kw name="Wait For Navigation" source="C:\Python\Lib\site-packages\Browser\keywords\network.py" lineno="177">
+<arguments>
+<arg>url: str</arg>
+<arg>timeout: timedelta = None</arg>
+<arg>regex: bool = False</arg>
+<arg>wait_until: PageLoadStates { load | domcontentloaded | networkidle } = PageLoadStates.load</arg>
+</arguments>
+<doc>Waits until page has navigated to given ``url``.
+
+``url``  expected navigation target address either the exact match or a JavaScript-like regex wrapped in ``/`` symbols.
+
+``timeout`` Timeout in milliseconds. Uses default timeout of 10 seconds if not set.
+
+``waitUntil`` &lt;"load"|"domcontentloaded"|"networkidle"&gt; When to consider operation succeeded, defaults to load. Events can be either:
+'domcontentloaded' - consider operation to be finished when the DOMContentLoaded event is fired.
+'load' - consider operation to be finished when the load event is fired.
+'networkidle' - consider operation to be finished when there are no network connections for at least 500 ms.</doc>
+<tags>
+<tag>HTTP</tag>
+<tag>Wait</tag>
+</tags>
+</kw>
+<kw name="Wait For Request" source="C:\Python\Lib\site-packages\Browser\keywords\network.py" lineno="126">
+<arguments>
+<arg>matcher: str = </arg>
+<arg>timeout: timedelta = None</arg>
+</arguments>
+<doc>Waits for request matching matcher to be made.
+
+``matcher`` Request URL string, JavaScript regex or JavaScript function to match request by.
+By default (with empty string) matches first available request.
+
+``timeout`` Timeout in seconds. Uses default timeout if not set.</doc>
+<tags>
+<tag>HTTP</tag>
+<tag>Wait</tag>
+</tags>
+</kw>
+<kw name="Wait For Response" source="C:\Python\Lib\site-packages\Browser\keywords\network.py" lineno="140">
+<arguments>
+<arg>matcher: str = </arg>
+<arg>timeout: timedelta = None</arg>
+</arguments>
+<doc>Waits for response matching matcher and returns python dict with contents.
+
+``matcher`` Request URL string, JavaScript regex or JavaScript function to match request by.
+By default (with empty string) matches first available request.
+
+``timeout`` Timeout in seconds. Uses default timeout if not set.
+
+The response is a Python dictionary with following attributes:
+  - ``status`` &lt;int&gt; The status code of the response.
+  - ``statusText`` &lt;str&gt; Status text corresponding to ``status``, e.g OK or INTERNAL SERVER ERROR.
+  - ``body`` &lt;dict | str&gt; The response body. If the body can be parsed as a JSON obejct,
+  it will be returned as Python dictionary, otherwise it is returned as a string.
+  - ``headers`` &lt;dict&gt; A dictionary containing all response headers.
+  - ``ok`` &lt;bool&gt; Whether the request was successfull, i.e. the ``status`` is range 200-299.
+  - ``request`` &lt;dict&gt; containing ``method`` &lt;str&gt;, ``headers`` &lt;dict&gt; and ``postData`` &lt;dict&gt; | &lt;str&gt;</doc>
+<tags>
+<tag>HTTP</tag>
+<tag>Wait</tag>
+</tags>
+</kw>
+<kw name="Wait Until Network Is Idle" source="C:\Python\Lib\site-packages\Browser\keywords\network.py" lineno="162">
+<arguments>
+<arg>timeout: timedelta = None</arg>
+</arguments>
+<doc>Waits until there has been at least one instance of 500 ms of no network traffic on the page after loading.
+
+Doesn't wait for network traffic that wasn't initiated within 500ms of page load.
+
+``timeout`` Timeout in milliseconds. Uses default timeout of 10 seconds if not set.</doc>
+<tags>
+<tag>HTTP</tag>
+<tag>Wait</tag>
+</tags>
+</kw>
+</keywordspec>

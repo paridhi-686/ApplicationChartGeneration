@@ -1,0 +1,2162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 3.2.2 (Python 3.8.3 on win32)" generated="20210603 23:25:42.825" rpa="true">
+<suite id="s1" name="ChartGeneration" source="C:\Users\pgo\eclipse-workspace\ChartGeneration">
+<kw name="Launch Browser" type="setup">
+<msg timestamp="20210603 23:25:43.762" level="TRACE">Arguments: [  ]</msg>
+<kw name="New Browser" library="Browser">
+<tags>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Create a new playwright Browser with specified options.
+See `Browser, Context and Page` for more information about Browser and related concepts.</doc>
+<arguments>
+<arg>chromium</arg>
+<arg>headless=false</arg>
+</arguments>
+<msg timestamp="20210603 23:25:43.763" level="TRACE">Arguments: [ &lt;SupportedBrowsers.chromium: 1&gt; | headless=False ]</msg>
+<msg timestamp="20210603 23:25:43.763" level="INFO">{"browser": "chromium", "headless": false, "handleSIGINT": true, "handleSIGTERM": true, "handleSIGHUP": true, "timeout": 30000.0, "devtools": false, "slowMo": 0.0}</msg>
+<msg timestamp="20210603 23:25:44.085" level="INFO">Successfully created browser with options: {"browser":"chromium","headless":false,"handleSIGINT":true,"handleSIGTERM":true,"handleSIGHUP":true,"timeout":30000,"devtools":false,"slowMo":0}</msg>
+<msg timestamp="20210603 23:25:44.085" level="TRACE">Return: 'browser=5618129d-f40e-4cfa-b2e5-a3eb716e2f0a'</msg>
+<status status="PASS" starttime="20210603 23:25:43.763" endtime="20210603 23:25:44.085"></status>
+</kw>
+<kw name="New Context" library="Browser">
+<tags>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Create a new BrowserContext with specified options.
+See `Browser, Context and Page` for more information about BrowserContext.</doc>
+<arguments>
+<arg>viewport={'width': ${windowWidth}, 'height': ${windowHeight}}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:44.087" level="TRACE">Arguments: [ viewport={'height': 1080, 'width': 1920} ]</msg>
+<msg timestamp="20210603 23:25:44.087" level="INFO">{"acceptDownloads": false, "ignoreHTTPSErrors": false, "bypassCSP": false, "viewport": {"width": 1920, "height": 1080}, "deviceScaleFactor": 1.0, "isMobile": false, "hasTouch": false, "javaScriptEnabled": true, "offline": false, "hideRfBrowser": false}</msg>
+<msg timestamp="20210603 23:25:44.100" level="INFO">Successfully created context with options: {"acceptDownloads":false,"ignoreHTTPSErrors":false,"bypassCSP":false,"viewport":{"width":1920,"height":1080},"deviceScaleFactor":1,"isMobile":false,"hasTouch":false,"javaScriptEnabled":true,"offline":false,"hideRfBrowser":false}</msg>
+<msg timestamp="20210603 23:25:44.101" level="TRACE">Return: 'context=ce7cb3d1-8fd6-4c53-8f06-9f2a7e9e7507'</msg>
+<status status="PASS" starttime="20210603 23:25:44.087" endtime="20210603 23:25:44.101"></status>
+</kw>
+<msg timestamp="20210603 23:25:44.101" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:43.762" endtime="20210603 23:25:44.101"></status>
+</kw>
+<suite id="s1-s1" name="ChartGenerationUI" source="C:\Users\pgo\eclipse-workspace\ChartGeneration\ChartGenerationUI">
+<suite id="s1-s1-s1" name="Tests" source="C:\Users\pgo\eclipse-workspace\ChartGeneration\ChartGenerationUI\Tests">
+<suite id="s1-s1-s1-s1" name="Content" source="C:\Users\pgo\eclipse-workspace\ChartGeneration\ChartGenerationUI\Tests\Content">
+<suite id="s1-s1-s1-s1-s1" name="PieChartItems" source="C:\Users\pgo\eclipse-workspace\ChartGeneration\ChartGenerationUI\Tests\Content\PieChartItems.robot">
+<test id="s1-s1-s1-s1-s1-t1" name="Verify modifications in chart when items added/deleted">
+<kw name="New Page" library="Browser">
+<tags>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Open a new Page. A Page is the Playwright equivalent to a tab.
+See `Browser, Context and Page` for more information about Page concept.
+Returns a stable identifier for the created page.</doc>
+<arguments>
+<arg>${envVarURL}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:44.141" level="TRACE">Arguments: [ 'https://spark.adobe.com/express-apps/chart/' ]</msg>
+<msg timestamp="20210603 23:25:46.582" level="INFO">Successfully initialized new page object and opened url: https://spark.adobe.com/express-apps/chart/</msg>
+<msg timestamp="20210603 23:25:46.582" level="DEBUG">Video is not enabled.</msg>
+<msg timestamp="20210603 23:25:46.582" level="TRACE">Return: 'page=25b38605-2dcc-415a-9b9e-56b059702715'</msg>
+<status status="PASS" starttime="20210603 23:25:44.140" endtime="20210603 23:25:46.583"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>=== Delete all items ===</arg>
+</arguments>
+<msg timestamp="20210603 23:25:46.584" level="TRACE">Arguments: [ '=== Delete all items ===' ]</msg>
+<msg timestamp="20210603 23:25:46.584" level="INFO">=== Delete all items ===</msg>
+<msg timestamp="20210603 23:25:46.584" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:46.583" endtime="20210603 23:25:46.584"></status>
+</kw>
+<kw name="Delete Item" library="SidePanelItemValuePO">
+<arguments>
+<arg>${localItemAnimlPurchse}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:46.585" level="TRACE">Arguments: [ ${argItemToBeDeleted}='Animal purchases' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//table/tbody//input[contains(@value,'${argItemToBeDeleted}')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]</arg>
+</arguments>
+<assign>
+<var>${locDelItem}</var>
+</assign>
+<msg timestamp="20210603 23:25:46.586" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'Animal purchases')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]" ]</msg>
+<msg timestamp="20210603 23:25:46.586" level="TRACE">Return: "//table/tbody//input[contains(@value,'Animal purchases')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]"</msg>
+<msg timestamp="20210603 23:25:46.586" level="INFO">${locDelItem} = //table/tbody//input[contains(@value,'Animal purchases')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]</msg>
+<status status="PASS" starttime="20210603 23:25:46.585" endtime="20210603 23:25:46.586"></status>
+</kw>
+<kw name="Click" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<arguments>
+<arg>${locDelItem}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:46.587" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'Animal purchases')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]" ]</msg>
+<msg timestamp="20210603 23:25:46.587" level="DEBUG">Click options are: {"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}</msg>
+<msg timestamp="20210603 23:25:46.796" level="DEBUG">Clicked element: '//table/tbody//input[contains(@value,'Animal purchases')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]' with options: '{"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}'</msg>
+<msg timestamp="20210603 23:25:46.796" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:46.586" endtime="20210603 23:25:46.796"></status>
+</kw>
+<msg timestamp="20210603 23:25:46.796" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:46.584" endtime="20210603 23:25:46.797"></status>
+</kw>
+<kw name="Delete Item" library="SidePanelItemValuePO">
+<arguments>
+<arg>${localItemFood}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:46.797" level="TRACE">Arguments: [ ${argItemToBeDeleted}='Food' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//table/tbody//input[contains(@value,'${argItemToBeDeleted}')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]</arg>
+</arguments>
+<assign>
+<var>${locDelItem}</var>
+</assign>
+<msg timestamp="20210603 23:25:46.798" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'Food')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]" ]</msg>
+<msg timestamp="20210603 23:25:46.798" level="TRACE">Return: "//table/tbody//input[contains(@value,'Food')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]"</msg>
+<msg timestamp="20210603 23:25:46.799" level="INFO">${locDelItem} = //table/tbody//input[contains(@value,'Food')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]</msg>
+<status status="PASS" starttime="20210603 23:25:46.798" endtime="20210603 23:25:46.799"></status>
+</kw>
+<kw name="Click" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<arguments>
+<arg>${locDelItem}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:46.800" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'Food')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]" ]</msg>
+<msg timestamp="20210603 23:25:46.800" level="DEBUG">Click options are: {"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}</msg>
+<msg timestamp="20210603 23:25:46.888" level="DEBUG">Clicked element: '//table/tbody//input[contains(@value,'Food')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]' with options: '{"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}'</msg>
+<msg timestamp="20210603 23:25:46.889" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:46.799" endtime="20210603 23:25:46.889"></status>
+</kw>
+<msg timestamp="20210603 23:25:46.889" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:46.797" endtime="20210603 23:25:46.890"></status>
+</kw>
+<kw name="Delete Item" library="SidePanelItemValuePO">
+<arguments>
+<arg>${localItemGrooming}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:46.890" level="TRACE">Arguments: [ ${argItemToBeDeleted}='Grooming/boarding' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//table/tbody//input[contains(@value,'${argItemToBeDeleted}')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]</arg>
+</arguments>
+<assign>
+<var>${locDelItem}</var>
+</assign>
+<msg timestamp="20210603 23:25:46.891" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'Grooming/boarding')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]" ]</msg>
+<msg timestamp="20210603 23:25:46.891" level="TRACE">Return: "//table/tbody//input[contains(@value,'Grooming/boarding')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]"</msg>
+<msg timestamp="20210603 23:25:46.892" level="INFO">${locDelItem} = //table/tbody//input[contains(@value,'Grooming/boarding')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]</msg>
+<status status="PASS" starttime="20210603 23:25:46.891" endtime="20210603 23:25:46.892"></status>
+</kw>
+<kw name="Click" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<arguments>
+<arg>${locDelItem}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:46.893" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'Grooming/boarding')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]" ]</msg>
+<msg timestamp="20210603 23:25:46.894" level="DEBUG">Click options are: {"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}</msg>
+<msg timestamp="20210603 23:25:46.963" level="DEBUG">Clicked element: '//table/tbody//input[contains(@value,'Grooming/boarding')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]' with options: '{"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}'</msg>
+<msg timestamp="20210603 23:25:46.963" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:46.892" endtime="20210603 23:25:46.963"></status>
+</kw>
+<msg timestamp="20210603 23:25:46.964" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:46.890" endtime="20210603 23:25:46.964"></status>
+</kw>
+<kw name="Delete Item" library="SidePanelItemValuePO">
+<arguments>
+<arg>${localItemVetCare}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:46.965" level="TRACE">Arguments: [ ${argItemToBeDeleted}='Vet care' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//table/tbody//input[contains(@value,'${argItemToBeDeleted}')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]</arg>
+</arguments>
+<assign>
+<var>${locDelItem}</var>
+</assign>
+<msg timestamp="20210603 23:25:46.967" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'Vet care')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]" ]</msg>
+<msg timestamp="20210603 23:25:46.967" level="TRACE">Return: "//table/tbody//input[contains(@value,'Vet care')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]"</msg>
+<msg timestamp="20210603 23:25:46.968" level="INFO">${locDelItem} = //table/tbody//input[contains(@value,'Vet care')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]</msg>
+<status status="PASS" starttime="20210603 23:25:46.966" endtime="20210603 23:25:46.968"></status>
+</kw>
+<kw name="Click" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<arguments>
+<arg>${locDelItem}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:46.970" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'Vet care')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]" ]</msg>
+<msg timestamp="20210603 23:25:46.970" level="DEBUG">Click options are: {"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}</msg>
+<msg timestamp="20210603 23:25:47.040" level="DEBUG">Clicked element: '//table/tbody//input[contains(@value,'Vet care')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]' with options: '{"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}'</msg>
+<msg timestamp="20210603 23:25:47.041" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:46.968" endtime="20210603 23:25:47.041"></status>
+</kw>
+<msg timestamp="20210603 23:25:47.041" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:46.964" endtime="20210603 23:25:47.041"></status>
+</kw>
+<kw name="Delete Item" library="SidePanelItemValuePO">
+<arguments>
+<arg>${localItemOTCCare}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.042" level="TRACE">Arguments: [ ${argItemToBeDeleted}='OTC Care/supplies' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//table/tbody//input[contains(@value,'${argItemToBeDeleted}')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]</arg>
+</arguments>
+<assign>
+<var>${locDelItem}</var>
+</assign>
+<msg timestamp="20210603 23:25:47.043" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'OTC Care/supplies')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]" ]</msg>
+<msg timestamp="20210603 23:25:47.043" level="TRACE">Return: "//table/tbody//input[contains(@value,'OTC Care/supplies')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]"</msg>
+<msg timestamp="20210603 23:25:47.044" level="INFO">${locDelItem} = //table/tbody//input[contains(@value,'OTC Care/supplies')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]</msg>
+<status status="PASS" starttime="20210603 23:25:47.043" endtime="20210603 23:25:47.044"></status>
+</kw>
+<kw name="Click" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<arguments>
+<arg>${locDelItem}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.044" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'OTC Care/supplies')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]" ]</msg>
+<msg timestamp="20210603 23:25:47.045" level="DEBUG">Click options are: {"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}</msg>
+<msg timestamp="20210603 23:25:47.107" level="DEBUG">Clicked element: '//table/tbody//input[contains(@value,'OTC Care/supplies')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]' with options: '{"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}'</msg>
+<msg timestamp="20210603 23:25:47.107" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.044" endtime="20210603 23:25:47.107"></status>
+</kw>
+<msg timestamp="20210603 23:25:47.107" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.042" endtime="20210603 23:25:47.107"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>=== Change chart title ===</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.108" level="TRACE">Arguments: [ '=== Change chart title ===' ]</msg>
+<msg timestamp="20210603 23:25:47.108" level="INFO">=== Change chart title ===</msg>
+<msg timestamp="20210603 23:25:47.108" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.108" endtime="20210603 23:25:47.108"></status>
+</kw>
+<kw name="Clear Chart Title" library="SidePanelItemValuePO">
+<msg timestamp="20210603 23:25:47.109" level="TRACE">Arguments: [  ]</msg>
+<kw name="Clear Text" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Clears the text field found by ``selector``.</doc>
+<arguments>
+<arg>${commonLocChartTitle}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.109" level="TRACE">Arguments: [ "//*[@id='chart-title']" ]</msg>
+<msg timestamp="20210603 23:25:47.144" level="DEBUG">Text field cleared.</msg>
+<msg timestamp="20210603 23:25:47.144" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.109" endtime="20210603 23:25:47.144"></status>
+</kw>
+<msg timestamp="20210603 23:25:47.145" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.109" endtime="20210603 23:25:47.145"></status>
+</kw>
+<kw name="Fill Chart Title" library="SidePanelItemValuePO">
+<arguments>
+<arg>${localChartTitle}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.145" level="TRACE">Arguments: [ ${argChartTitle}='test1' ]</msg>
+<kw name="Fill Text" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Clears and fills the given ``text`` into the text field found by ``selector``.</doc>
+<arguments>
+<arg>${commonLocChartTitle}</arg>
+<arg>${argChartTitle}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.147" level="TRACE">Arguments: [ "//*[@id='chart-title']" | 'test1' ]</msg>
+<msg timestamp="20210603 23:25:47.147" level="INFO">Fills the text 'test1' in the given field.</msg>
+<msg timestamp="20210603 23:25:47.177" level="DEBUG">Fill text: test1</msg>
+<msg timestamp="20210603 23:25:47.177" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.146" endtime="20210603 23:25:47.177"></status>
+</kw>
+<msg timestamp="20210603 23:25:47.177" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.145" endtime="20210603 23:25:47.177"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>=== Add Items and values ===</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.178" level="TRACE">Arguments: [ '=== Add Items and values ===' ]</msg>
+<msg timestamp="20210603 23:25:47.178" level="INFO">=== Add Items and values ===</msg>
+<msg timestamp="20210603 23:25:47.178" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.178" endtime="20210603 23:25:47.178"></status>
+</kw>
+<kw name="Select Add Item" library="SidePanelItemValuePO">
+<msg timestamp="20210603 23:25:47.180" level="TRACE">Arguments: [  ]</msg>
+<kw name="Click" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<arguments>
+<arg>${commonLocAddItem}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.180" level="TRACE">Arguments: [ "//button[contains(text(),'Add Item')]" ]</msg>
+<msg timestamp="20210603 23:25:47.180" level="DEBUG">Click options are: {"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}</msg>
+<msg timestamp="20210603 23:25:47.254" level="DEBUG">Clicked element: '//button[contains(text(),'Add Item')]' with options: '{"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}'</msg>
+<msg timestamp="20210603 23:25:47.254" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.180" endtime="20210603 23:25:47.254"></status>
+</kw>
+<msg timestamp="20210603 23:25:47.255" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.178" endtime="20210603 23:25:47.255"></status>
+</kw>
+<kw name="Add Item" library="SidePanelItemValuePO">
+<arguments>
+<arg>${localItem1}</arg>
+<arg>argRow=2</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.256" level="TRACE">Arguments: [ ${argItemToBeAdded}='item1' | ${argRow}='2' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//table/tbody//tr[${argRow}]//input[contains(@placeholder, 'Type to add ...')]</arg>
+</arguments>
+<assign>
+<var>${locAddItem}</var>
+</assign>
+<msg timestamp="20210603 23:25:47.257" level="TRACE">Arguments: [ "//table/tbody//tr[2]//input[contains(@placeholder, 'Type to add ...')]" ]</msg>
+<msg timestamp="20210603 23:25:47.257" level="TRACE">Return: "//table/tbody//tr[2]//input[contains(@placeholder, 'Type to add ...')]"</msg>
+<msg timestamp="20210603 23:25:47.257" level="INFO">${locAddItem} = //table/tbody//tr[2]//input[contains(@placeholder, 'Type to add ...')]</msg>
+<status status="PASS" starttime="20210603 23:25:47.256" endtime="20210603 23:25:47.257"></status>
+</kw>
+<kw name="Wait For Elements State" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+</tags>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<arguments>
+<arg>${locAddItem}</arg>
+<arg>state=visible</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.258" level="TRACE">Arguments: [ "//table/tbody//tr[2]//input[contains(@placeholder, 'Type to add ...')]" | state=&lt;ElementState.visible: 3&gt; ]</msg>
+<msg timestamp="20210603 23:25:47.275" level="INFO">Wait for Element with selector: //table/tbody//tr[2]//input[contains(@placeholder, 'Type to add ...')]</msg>
+<msg timestamp="20210603 23:25:47.275" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.258" endtime="20210603 23:25:47.276"></status>
+</kw>
+<kw name="Fill Text" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Clears and fills the given ``text`` into the text field found by ``selector``.</doc>
+<arguments>
+<arg>${locAddItem}</arg>
+<arg>${argItemToBeAdded}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.277" level="TRACE">Arguments: [ "//table/tbody//tr[2]//input[contains(@placeholder, 'Type to add ...')]" | 'item1' ]</msg>
+<msg timestamp="20210603 23:25:47.277" level="INFO">Fills the text 'item1' in the given field.</msg>
+<msg timestamp="20210603 23:25:47.308" level="DEBUG">Fill text: item1</msg>
+<msg timestamp="20210603 23:25:47.308" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.276" endtime="20210603 23:25:47.308"></status>
+</kw>
+<msg timestamp="20210603 23:25:47.308" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.255" endtime="20210603 23:25:47.309"></status>
+</kw>
+<kw name="Select Add Item" library="SidePanelItemValuePO">
+<msg timestamp="20210603 23:25:47.309" level="TRACE">Arguments: [  ]</msg>
+<kw name="Click" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<arguments>
+<arg>${commonLocAddItem}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.310" level="TRACE">Arguments: [ "//button[contains(text(),'Add Item')]" ]</msg>
+<msg timestamp="20210603 23:25:47.312" level="DEBUG">Click options are: {"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}</msg>
+<msg timestamp="20210603 23:25:47.365" level="DEBUG">Clicked element: '//button[contains(text(),'Add Item')]' with options: '{"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}'</msg>
+<msg timestamp="20210603 23:25:47.365" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.310" endtime="20210603 23:25:47.366"></status>
+</kw>
+<msg timestamp="20210603 23:25:47.366" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.309" endtime="20210603 23:25:47.366"></status>
+</kw>
+<kw name="Add Item" library="SidePanelItemValuePO">
+<arguments>
+<arg>${localItem2}</arg>
+<arg>argRow=3</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.368" level="TRACE">Arguments: [ ${argItemToBeAdded}='item2' | ${argRow}='3' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//table/tbody//tr[${argRow}]//input[contains(@placeholder, 'Type to add ...')]</arg>
+</arguments>
+<assign>
+<var>${locAddItem}</var>
+</assign>
+<msg timestamp="20210603 23:25:47.369" level="TRACE">Arguments: [ "//table/tbody//tr[3]//input[contains(@placeholder, 'Type to add ...')]" ]</msg>
+<msg timestamp="20210603 23:25:47.369" level="TRACE">Return: "//table/tbody//tr[3]//input[contains(@placeholder, 'Type to add ...')]"</msg>
+<msg timestamp="20210603 23:25:47.369" level="INFO">${locAddItem} = //table/tbody//tr[3]//input[contains(@placeholder, 'Type to add ...')]</msg>
+<status status="PASS" starttime="20210603 23:25:47.369" endtime="20210603 23:25:47.369"></status>
+</kw>
+<kw name="Wait For Elements State" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+</tags>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<arguments>
+<arg>${locAddItem}</arg>
+<arg>state=visible</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.369" level="TRACE">Arguments: [ "//table/tbody//tr[3]//input[contains(@placeholder, 'Type to add ...')]" | state=&lt;ElementState.visible: 3&gt; ]</msg>
+<msg timestamp="20210603 23:25:47.381" level="INFO">Wait for Element with selector: //table/tbody//tr[3]//input[contains(@placeholder, 'Type to add ...')]</msg>
+<msg timestamp="20210603 23:25:47.381" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.369" endtime="20210603 23:25:47.381"></status>
+</kw>
+<kw name="Fill Text" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Clears and fills the given ``text`` into the text field found by ``selector``.</doc>
+<arguments>
+<arg>${locAddItem}</arg>
+<arg>${argItemToBeAdded}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.383" level="TRACE">Arguments: [ "//table/tbody//tr[3]//input[contains(@placeholder, 'Type to add ...')]" | 'item2' ]</msg>
+<msg timestamp="20210603 23:25:47.383" level="INFO">Fills the text 'item2' in the given field.</msg>
+<msg timestamp="20210603 23:25:47.419" level="DEBUG">Fill text: item2</msg>
+<msg timestamp="20210603 23:25:47.419" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.382" endtime="20210603 23:25:47.419"></status>
+</kw>
+<msg timestamp="20210603 23:25:47.420" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.366" endtime="20210603 23:25:47.420"></status>
+</kw>
+<kw name="Add Item Value" library="SidePanelItemValuePO">
+<arguments>
+<arg>${localItem2}</arg>
+<arg>20</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.421" level="TRACE">Arguments: [ ${argItem}='item2' | ${argItemValue}='20' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//table/tbody//input[contains(@value,'${argItem}')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]</arg>
+</arguments>
+<assign>
+<var>${locAddItemValue}</var>
+</assign>
+<msg timestamp="20210603 23:25:47.422" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'item2')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]" ]</msg>
+<msg timestamp="20210603 23:25:47.422" level="TRACE">Return: "//table/tbody//input[contains(@value,'item2')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]"</msg>
+<msg timestamp="20210603 23:25:47.422" level="INFO">${locAddItemValue} = //table/tbody//input[contains(@value,'item2')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]</msg>
+<status status="PASS" starttime="20210603 23:25:47.421" endtime="20210603 23:25:47.423"></status>
+</kw>
+<kw name="Click" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<arguments>
+<arg>${locAddItemValue}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.423" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'item2')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]" ]</msg>
+<msg timestamp="20210603 23:25:47.424" level="DEBUG">Click options are: {"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}</msg>
+<msg timestamp="20210603 23:25:47.489" level="DEBUG">Clicked element: '//table/tbody//input[contains(@value,'item2')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]' with options: '{"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}'</msg>
+<msg timestamp="20210603 23:25:47.489" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.423" endtime="20210603 23:25:47.489"></status>
+</kw>
+<kw name="Clear Text" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Clears the text field found by ``selector``.</doc>
+<arguments>
+<arg>${locAddItemValue}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.491" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'item2')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]" ]</msg>
+<msg timestamp="20210603 23:25:47.523" level="DEBUG">Text field cleared.</msg>
+<msg timestamp="20210603 23:25:47.523" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.490" endtime="20210603 23:25:47.523"></status>
+</kw>
+<kw name="Fill Text" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Clears and fills the given ``text`` into the text field found by ``selector``.</doc>
+<arguments>
+<arg>${locAddItemValue}</arg>
+<arg>${argItemValue}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.524" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'item2')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]" | '20' ]</msg>
+<msg timestamp="20210603 23:25:47.525" level="INFO">Fills the text '20' in the given field.</msg>
+<msg timestamp="20210603 23:25:47.558" level="DEBUG">Fill text: 20</msg>
+<msg timestamp="20210603 23:25:47.558" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.524" endtime="20210603 23:25:47.558"></status>
+</kw>
+<msg timestamp="20210603 23:25:47.559" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.420" endtime="20210603 23:25:47.559"></status>
+</kw>
+<kw name="Select Add Item" library="SidePanelItemValuePO">
+<msg timestamp="20210603 23:25:47.559" level="TRACE">Arguments: [  ]</msg>
+<kw name="Click" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<arguments>
+<arg>${commonLocAddItem}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.561" level="TRACE">Arguments: [ "//button[contains(text(),'Add Item')]" ]</msg>
+<msg timestamp="20210603 23:25:47.561" level="DEBUG">Click options are: {"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}</msg>
+<msg timestamp="20210603 23:25:47.653" level="DEBUG">Clicked element: '//button[contains(text(),'Add Item')]' with options: '{"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}'</msg>
+<msg timestamp="20210603 23:25:47.654" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.560" endtime="20210603 23:25:47.654"></status>
+</kw>
+<msg timestamp="20210603 23:25:47.654" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.559" endtime="20210603 23:25:47.654"></status>
+</kw>
+<kw name="Add Item" library="SidePanelItemValuePO">
+<arguments>
+<arg>${localItem3}</arg>
+<arg>argRow=4</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.655" level="TRACE">Arguments: [ ${argItemToBeAdded}='item3' | ${argRow}='4' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//table/tbody//tr[${argRow}]//input[contains(@placeholder, 'Type to add ...')]</arg>
+</arguments>
+<assign>
+<var>${locAddItem}</var>
+</assign>
+<msg timestamp="20210603 23:25:47.656" level="TRACE">Arguments: [ "//table/tbody//tr[4]//input[contains(@placeholder, 'Type to add ...')]" ]</msg>
+<msg timestamp="20210603 23:25:47.657" level="TRACE">Return: "//table/tbody//tr[4]//input[contains(@placeholder, 'Type to add ...')]"</msg>
+<msg timestamp="20210603 23:25:47.657" level="INFO">${locAddItem} = //table/tbody//tr[4]//input[contains(@placeholder, 'Type to add ...')]</msg>
+<status status="PASS" starttime="20210603 23:25:47.656" endtime="20210603 23:25:47.657"></status>
+</kw>
+<kw name="Wait For Elements State" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+</tags>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<arguments>
+<arg>${locAddItem}</arg>
+<arg>state=visible</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.658" level="TRACE">Arguments: [ "//table/tbody//tr[4]//input[contains(@placeholder, 'Type to add ...')]" | state=&lt;ElementState.visible: 3&gt; ]</msg>
+<msg timestamp="20210603 23:25:47.669" level="INFO">Wait for Element with selector: //table/tbody//tr[4]//input[contains(@placeholder, 'Type to add ...')]</msg>
+<msg timestamp="20210603 23:25:47.669" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.657" endtime="20210603 23:25:47.669"></status>
+</kw>
+<kw name="Fill Text" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Clears and fills the given ``text`` into the text field found by ``selector``.</doc>
+<arguments>
+<arg>${locAddItem}</arg>
+<arg>${argItemToBeAdded}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.670" level="TRACE">Arguments: [ "//table/tbody//tr[4]//input[contains(@placeholder, 'Type to add ...')]" | 'item3' ]</msg>
+<msg timestamp="20210603 23:25:47.670" level="INFO">Fills the text 'item3' in the given field.</msg>
+<msg timestamp="20210603 23:25:47.707" level="DEBUG">Fill text: item3</msg>
+<msg timestamp="20210603 23:25:47.707" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.670" endtime="20210603 23:25:47.707"></status>
+</kw>
+<msg timestamp="20210603 23:25:47.707" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.655" endtime="20210603 23:25:47.707"></status>
+</kw>
+<kw name="Add Item Value" library="SidePanelItemValuePO">
+<arguments>
+<arg>${localItem3}</arg>
+<arg>30</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.708" level="TRACE">Arguments: [ ${argItem}='item3' | ${argItemValue}='30' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//table/tbody//input[contains(@value,'${argItem}')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]</arg>
+</arguments>
+<assign>
+<var>${locAddItemValue}</var>
+</assign>
+<msg timestamp="20210603 23:25:47.709" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'item3')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]" ]</msg>
+<msg timestamp="20210603 23:25:47.709" level="TRACE">Return: "//table/tbody//input[contains(@value,'item3')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]"</msg>
+<msg timestamp="20210603 23:25:47.709" level="INFO">${locAddItemValue} = //table/tbody//input[contains(@value,'item3')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]</msg>
+<status status="PASS" starttime="20210603 23:25:47.708" endtime="20210603 23:25:47.709"></status>
+</kw>
+<kw name="Click" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<arguments>
+<arg>${locAddItemValue}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.710" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'item3')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]" ]</msg>
+<msg timestamp="20210603 23:25:47.725" level="DEBUG">Click options are: {"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}</msg>
+<msg timestamp="20210603 23:25:47.819" level="DEBUG">Clicked element: '//table/tbody//input[contains(@value,'item3')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]' with options: '{"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}'</msg>
+<msg timestamp="20210603 23:25:47.820" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.710" endtime="20210603 23:25:47.821"></status>
+</kw>
+<kw name="Clear Text" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Clears the text field found by ``selector``.</doc>
+<arguments>
+<arg>${locAddItemValue}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.822" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'item3')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]" ]</msg>
+<msg timestamp="20210603 23:25:47.882" level="DEBUG">Text field cleared.</msg>
+<msg timestamp="20210603 23:25:47.883" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.821" endtime="20210603 23:25:47.883"></status>
+</kw>
+<kw name="Fill Text" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Clears and fills the given ``text`` into the text field found by ``selector``.</doc>
+<arguments>
+<arg>${locAddItemValue}</arg>
+<arg>${argItemValue}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.886" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'item3')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]" | '30' ]</msg>
+<msg timestamp="20210603 23:25:47.887" level="INFO">Fills the text '30' in the given field.</msg>
+<msg timestamp="20210603 23:25:47.943" level="DEBUG">Fill text: 30</msg>
+<msg timestamp="20210603 23:25:47.943" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.884" endtime="20210603 23:25:47.944"></status>
+</kw>
+<msg timestamp="20210603 23:25:47.944" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.708" endtime="20210603 23:25:47.945"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>=== Verify chart entries ===</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.947" level="TRACE">Arguments: [ '=== Verify chart entries ===' ]</msg>
+<msg timestamp="20210603 23:25:47.947" level="INFO">=== Verify chart entries ===</msg>
+<msg timestamp="20210603 23:25:47.948" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.946" endtime="20210603 23:25:47.948"></status>
+</kw>
+<kw name="Verify Chart Title" library="ChartLayoutPO">
+<arguments>
+<arg>${localChartTitle}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.951" level="TRACE">Arguments: [ ${argTitle}='test1' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//div[contains(@class,'layout')]//*[contains(text(),'${argTitle}')]</arg>
+</arguments>
+<assign>
+<var>${locChartTitle}</var>
+</assign>
+<msg timestamp="20210603 23:25:47.952" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(text(),'test1')]" ]</msg>
+<msg timestamp="20210603 23:25:47.953" level="TRACE">Return: "//div[contains(@class,'layout')]//*[contains(text(),'test1')]"</msg>
+<msg timestamp="20210603 23:25:47.953" level="INFO">${locChartTitle} = //div[contains(@class,'layout')]//*[contains(text(),'test1')]</msg>
+<status status="PASS" starttime="20210603 23:25:47.952" endtime="20210603 23:25:47.953"></status>
+</kw>
+<kw name="Wait For Elements State" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+</tags>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<arguments>
+<arg>${locChartTitle}</arg>
+<arg>state=visible</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.955" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(text(),'test1')]" | state=&lt;ElementState.visible: 3&gt; ]</msg>
+<msg timestamp="20210603 23:25:47.979" level="INFO">Wait for Element with selector: //div[contains(@class,'layout')]//*[contains(text(),'test1')]</msg>
+<msg timestamp="20210603 23:25:47.980" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.954" endtime="20210603 23:25:47.980"></status>
+</kw>
+<msg timestamp="20210603 23:25:47.981" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.950" endtime="20210603 23:25:47.981"></status>
+</kw>
+<kw name="Verify Chart Contains Items" library="ChartLayoutPO">
+<arguments>
+<arg>${localItem1}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.983" level="TRACE">Arguments: [ ${argItem}='item1' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//div[contains(@class,'layout')]//*[contains(text(),'${argItem}')]</arg>
+</arguments>
+<assign>
+<var>${locChartItem}</var>
+</assign>
+<msg timestamp="20210603 23:25:47.985" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(text(),'item1')]" ]</msg>
+<msg timestamp="20210603 23:25:47.985" level="TRACE">Return: "//div[contains(@class,'layout')]//*[contains(text(),'item1')]"</msg>
+<msg timestamp="20210603 23:25:47.985" level="INFO">${locChartItem} = //div[contains(@class,'layout')]//*[contains(text(),'item1')]</msg>
+<status status="PASS" starttime="20210603 23:25:47.984" endtime="20210603 23:25:47.986"></status>
+</kw>
+<kw name="Wait For Elements State" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+</tags>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<arguments>
+<arg>${locChartItem}</arg>
+<arg>state=visible</arg>
+</arguments>
+<msg timestamp="20210603 23:25:47.987" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(text(),'item1')]" | state=&lt;ElementState.visible: 3&gt; ]</msg>
+<msg timestamp="20210603 23:25:48.004" level="INFO">Wait for Element with selector: //div[contains(@class,'layout')]//*[contains(text(),'item1')]</msg>
+<msg timestamp="20210603 23:25:48.005" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.986" endtime="20210603 23:25:48.005"></status>
+</kw>
+<msg timestamp="20210603 23:25:48.007" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:47.982" endtime="20210603 23:25:48.007"></status>
+</kw>
+<kw name="Verify Chart Contains Items" library="ChartLayoutPO">
+<arguments>
+<arg>${localItem2}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:48.008" level="TRACE">Arguments: [ ${argItem}='item2' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//div[contains(@class,'layout')]//*[contains(text(),'${argItem}')]</arg>
+</arguments>
+<assign>
+<var>${locChartItem}</var>
+</assign>
+<msg timestamp="20210603 23:25:48.009" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(text(),'item2')]" ]</msg>
+<msg timestamp="20210603 23:25:48.010" level="TRACE">Return: "//div[contains(@class,'layout')]//*[contains(text(),'item2')]"</msg>
+<msg timestamp="20210603 23:25:48.010" level="INFO">${locChartItem} = //div[contains(@class,'layout')]//*[contains(text(),'item2')]</msg>
+<status status="PASS" starttime="20210603 23:25:48.009" endtime="20210603 23:25:48.010"></status>
+</kw>
+<kw name="Wait For Elements State" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+</tags>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<arguments>
+<arg>${locChartItem}</arg>
+<arg>state=visible</arg>
+</arguments>
+<msg timestamp="20210603 23:25:48.012" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(text(),'item2')]" | state=&lt;ElementState.visible: 3&gt; ]</msg>
+<msg timestamp="20210603 23:25:48.031" level="INFO">Wait for Element with selector: //div[contains(@class,'layout')]//*[contains(text(),'item2')]</msg>
+<msg timestamp="20210603 23:25:48.032" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:48.011" endtime="20210603 23:25:48.032"></status>
+</kw>
+<msg timestamp="20210603 23:25:48.033" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:48.007" endtime="20210603 23:25:48.033"></status>
+</kw>
+<kw name="Verify Chart Contains Items" library="ChartLayoutPO">
+<arguments>
+<arg>${localItem3}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:48.035" level="TRACE">Arguments: [ ${argItem}='item3' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//div[contains(@class,'layout')]//*[contains(text(),'${argItem}')]</arg>
+</arguments>
+<assign>
+<var>${locChartItem}</var>
+</assign>
+<msg timestamp="20210603 23:25:48.036" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(text(),'item3')]" ]</msg>
+<msg timestamp="20210603 23:25:48.037" level="TRACE">Return: "//div[contains(@class,'layout')]//*[contains(text(),'item3')]"</msg>
+<msg timestamp="20210603 23:25:48.037" level="INFO">${locChartItem} = //div[contains(@class,'layout')]//*[contains(text(),'item3')]</msg>
+<status status="PASS" starttime="20210603 23:25:48.036" endtime="20210603 23:25:48.037"></status>
+</kw>
+<kw name="Wait For Elements State" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+</tags>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<arguments>
+<arg>${locChartItem}</arg>
+<arg>state=visible</arg>
+</arguments>
+<msg timestamp="20210603 23:25:48.039" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(text(),'item3')]" | state=&lt;ElementState.visible: 3&gt; ]</msg>
+<msg timestamp="20210603 23:25:48.071" level="INFO">Wait for Element with selector: //div[contains(@class,'layout')]//*[contains(text(),'item3')]</msg>
+<msg timestamp="20210603 23:25:48.072" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:48.038" endtime="20210603 23:25:48.072"></status>
+</kw>
+<msg timestamp="20210603 23:25:48.073" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:48.034" endtime="20210603 23:25:48.074"></status>
+</kw>
+<kw name="Verify Chart Contains Values" library="ChartLayoutPO">
+<arguments>
+<arg>10</arg>
+</arguments>
+<msg timestamp="20210603 23:25:48.075" level="TRACE">Arguments: [ ${argValue}='10' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//div[contains(@class,'layout')]//*[contains(text(),'${argValue}')]</arg>
+</arguments>
+<assign>
+<var>${locChartValue}</var>
+</assign>
+<msg timestamp="20210603 23:25:48.078" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(text(),'10')]" ]</msg>
+<msg timestamp="20210603 23:25:48.078" level="TRACE">Return: "//div[contains(@class,'layout')]//*[contains(text(),'10')]"</msg>
+<msg timestamp="20210603 23:25:48.078" level="INFO">${locChartValue} = //div[contains(@class,'layout')]//*[contains(text(),'10')]</msg>
+<status status="PASS" starttime="20210603 23:25:48.077" endtime="20210603 23:25:48.078"></status>
+</kw>
+<kw name="Wait For Elements State" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+</tags>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<arguments>
+<arg>${locChartValue}</arg>
+<arg>state=visible</arg>
+</arguments>
+<msg timestamp="20210603 23:25:48.079" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(text(),'10')]" | state=&lt;ElementState.visible: 3&gt; ]</msg>
+<msg timestamp="20210603 23:25:48.095" level="INFO">Wait for Element with selector: //div[contains(@class,'layout')]//*[contains(text(),'10')]</msg>
+<msg timestamp="20210603 23:25:48.095" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:48.079" endtime="20210603 23:25:48.096"></status>
+</kw>
+<msg timestamp="20210603 23:25:48.096" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:48.074" endtime="20210603 23:25:48.096"></status>
+</kw>
+<kw name="Verify Chart Contains Values" library="ChartLayoutPO">
+<arguments>
+<arg>20</arg>
+</arguments>
+<msg timestamp="20210603 23:25:48.097" level="TRACE">Arguments: [ ${argValue}='20' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//div[contains(@class,'layout')]//*[contains(text(),'${argValue}')]</arg>
+</arguments>
+<assign>
+<var>${locChartValue}</var>
+</assign>
+<msg timestamp="20210603 23:25:48.098" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(text(),'20')]" ]</msg>
+<msg timestamp="20210603 23:25:48.098" level="TRACE">Return: "//div[contains(@class,'layout')]//*[contains(text(),'20')]"</msg>
+<msg timestamp="20210603 23:25:48.098" level="INFO">${locChartValue} = //div[contains(@class,'layout')]//*[contains(text(),'20')]</msg>
+<status status="PASS" starttime="20210603 23:25:48.097" endtime="20210603 23:25:48.098"></status>
+</kw>
+<kw name="Wait For Elements State" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+</tags>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<arguments>
+<arg>${locChartValue}</arg>
+<arg>state=visible</arg>
+</arguments>
+<msg timestamp="20210603 23:25:48.100" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(text(),'20')]" | state=&lt;ElementState.visible: 3&gt; ]</msg>
+<msg timestamp="20210603 23:25:48.110" level="INFO">Wait for Element with selector: //div[contains(@class,'layout')]//*[contains(text(),'20')]</msg>
+<msg timestamp="20210603 23:25:48.110" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:48.099" endtime="20210603 23:25:48.110"></status>
+</kw>
+<msg timestamp="20210603 23:25:48.111" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:48.096" endtime="20210603 23:25:48.111"></status>
+</kw>
+<kw name="Verify Chart Contains Values" library="ChartLayoutPO">
+<arguments>
+<arg>30</arg>
+</arguments>
+<msg timestamp="20210603 23:25:48.111" level="TRACE">Arguments: [ ${argValue}='30' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//div[contains(@class,'layout')]//*[contains(text(),'${argValue}')]</arg>
+</arguments>
+<assign>
+<var>${locChartValue}</var>
+</assign>
+<msg timestamp="20210603 23:25:48.112" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(text(),'30')]" ]</msg>
+<msg timestamp="20210603 23:25:48.112" level="TRACE">Return: "//div[contains(@class,'layout')]//*[contains(text(),'30')]"</msg>
+<msg timestamp="20210603 23:25:48.112" level="INFO">${locChartValue} = //div[contains(@class,'layout')]//*[contains(text(),'30')]</msg>
+<status status="PASS" starttime="20210603 23:25:48.112" endtime="20210603 23:25:48.113"></status>
+</kw>
+<kw name="Wait For Elements State" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+</tags>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<arguments>
+<arg>${locChartValue}</arg>
+<arg>state=visible</arg>
+</arguments>
+<msg timestamp="20210603 23:25:48.114" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(text(),'30')]" | state=&lt;ElementState.visible: 3&gt; ]</msg>
+<msg timestamp="20210603 23:25:48.122" level="INFO">Wait for Element with selector: //div[contains(@class,'layout')]//*[contains(text(),'30')]</msg>
+<msg timestamp="20210603 23:25:48.122" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:48.114" endtime="20210603 23:25:48.122"></status>
+</kw>
+<msg timestamp="20210603 23:25:48.122" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:48.111" endtime="20210603 23:25:48.122"></status>
+</kw>
+<kw name="Verify Identical Color Count" library="ChartLayoutPO">
+<arguments>
+<arg>2</arg>
+</arguments>
+<msg timestamp="20210603 23:25:48.123" level="TRACE">Arguments: [ ${argCount}='2' ]</msg>
+<kw name="Get Element Count" library="Browser">
+<tags>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<arguments>
+<arg>${locIdenticalColor}</arg>
+<arg>==</arg>
+<arg>${argCount}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:48.124" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(@fill,'#20336e')]" | &lt;AssertionOperator.equal: '=='&gt; | '2' ]</msg>
+<msg timestamp="20210603 23:25:48.134" level="DEBUG">Assertion polling statistics:
+First element asserted in: 0.010001659393310547 seconds
+Total tries: 1
+Elapsed time in retries 0.0 seconds</msg>
+<msg timestamp="20210603 23:25:48.135" level="TRACE">Return: 2</msg>
+<status status="PASS" starttime="20210603 23:25:48.123" endtime="20210603 23:25:48.135"></status>
+</kw>
+<msg timestamp="20210603 23:25:48.136" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:48.123" endtime="20210603 23:25:48.136"></status>
+</kw>
+<kw name="Verify Value Sum" library="ChartLayoutPO">
+<arguments>
+<arg>60</arg>
+</arguments>
+<msg timestamp="20210603 23:25:48.136" level="TRACE">Arguments: [ ${argTotal}='60' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//div[contains(@class,'layout')]//*[contains(text(),'${argTotal}')]</arg>
+</arguments>
+<assign>
+<var>${locSum}</var>
+</assign>
+<msg timestamp="20210603 23:25:48.137" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(text(),'60')]" ]</msg>
+<msg timestamp="20210603 23:25:48.137" level="TRACE">Return: "//div[contains(@class,'layout')]//*[contains(text(),'60')]"</msg>
+<msg timestamp="20210603 23:25:48.137" level="INFO">${locSum} = //div[contains(@class,'layout')]//*[contains(text(),'60')]</msg>
+<status status="PASS" starttime="20210603 23:25:48.136" endtime="20210603 23:25:48.137"></status>
+</kw>
+<kw name="Wait For Elements State" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+</tags>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<arguments>
+<arg>${locSum}</arg>
+<arg>state=visible</arg>
+</arguments>
+<msg timestamp="20210603 23:25:48.138" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(text(),'60')]" | state=&lt;ElementState.visible: 3&gt; ]</msg>
+<msg timestamp="20210603 23:25:48.146" level="INFO">Wait for Element with selector: //div[contains(@class,'layout')]//*[contains(text(),'60')]</msg>
+<msg timestamp="20210603 23:25:48.146" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:48.138" endtime="20210603 23:25:48.147"></status>
+</kw>
+<msg timestamp="20210603 23:25:48.147" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:48.136" endtime="20210603 23:25:48.147"></status>
+</kw>
+<doc>Test covers deletion &amp; addition of items &amp; values
+along with verification of pie chart.</doc>
+<status status="PASS" starttime="20210603 23:25:44.137" endtime="20210603 23:25:48.147" critical="yes"></status>
+</test>
+<status status="PASS" starttime="20210603 23:25:44.111" endtime="20210603 23:25:48.323"></status>
+</suite>
+<status status="PASS" starttime="20210603 23:25:44.108" endtime="20210603 23:25:48.328"></status>
+</suite>
+<suite id="s1-s1-s1-s2" name="Design" source="C:\Users\pgo\eclipse-workspace\ChartGeneration\ChartGenerationUI\Tests\Design">
+<suite id="s1-s1-s1-s2-s1" name="DesignBarChartItems" source="C:\Users\pgo\eclipse-workspace\ChartGeneration\ChartGenerationUI\Tests\Design\DesignBarChartItems.robot">
+<test id="s1-s1-s1-s2-s1-t1" name="Verify Bar Chart View when items added">
+<kw name="New Page" library="Browser">
+<tags>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Open a new Page. A Page is the Playwright equivalent to a tab.
+See `Browser, Context and Page` for more information about Page concept.
+Returns a stable identifier for the created page.</doc>
+<arguments>
+<arg>${envVarURL}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:48.383" level="TRACE">Arguments: [ 'https://spark.adobe.com/express-apps/chart/' ]</msg>
+<msg timestamp="20210603 23:25:50.035" level="INFO">Successfully initialized new page object and opened url: https://spark.adobe.com/express-apps/chart/</msg>
+<msg timestamp="20210603 23:25:50.035" level="DEBUG">Video is not enabled.</msg>
+<msg timestamp="20210603 23:25:50.036" level="TRACE">Return: 'page=ddf500fd-2783-472a-84ea-b20e1d96372c'</msg>
+<status status="PASS" starttime="20210603 23:25:48.383" endtime="20210603 23:25:50.036"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>=== Delete existing items ===</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.038" level="TRACE">Arguments: [ '=== Delete existing items ===' ]</msg>
+<msg timestamp="20210603 23:25:50.039" level="INFO">=== Delete existing items ===</msg>
+<msg timestamp="20210603 23:25:50.039" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.037" endtime="20210603 23:25:50.039"></status>
+</kw>
+<kw name="Delete Item" library="SidePanelItemValuePO">
+<arguments>
+<arg>${localItemAnimlPurchse}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.040" level="TRACE">Arguments: [ ${argItemToBeDeleted}='Animal purchases' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//table/tbody//input[contains(@value,'${argItemToBeDeleted}')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]</arg>
+</arguments>
+<assign>
+<var>${locDelItem}</var>
+</assign>
+<msg timestamp="20210603 23:25:50.040" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'Animal purchases')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]" ]</msg>
+<msg timestamp="20210603 23:25:50.041" level="TRACE">Return: "//table/tbody//input[contains(@value,'Animal purchases')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]"</msg>
+<msg timestamp="20210603 23:25:50.041" level="INFO">${locDelItem} = //table/tbody//input[contains(@value,'Animal purchases')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]</msg>
+<status status="PASS" starttime="20210603 23:25:50.040" endtime="20210603 23:25:50.041"></status>
+</kw>
+<kw name="Click" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<arguments>
+<arg>${locDelItem}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.041" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'Animal purchases')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]" ]</msg>
+<msg timestamp="20210603 23:25:50.042" level="DEBUG">Click options are: {"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}</msg>
+<msg timestamp="20210603 23:25:50.200" level="DEBUG">Clicked element: '//table/tbody//input[contains(@value,'Animal purchases')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]' with options: '{"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}'</msg>
+<msg timestamp="20210603 23:25:50.201" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.041" endtime="20210603 23:25:50.201"></status>
+</kw>
+<msg timestamp="20210603 23:25:50.201" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.039" endtime="20210603 23:25:50.201"></status>
+</kw>
+<kw name="Delete Item" library="SidePanelItemValuePO">
+<arguments>
+<arg>${localItemFood}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.202" level="TRACE">Arguments: [ ${argItemToBeDeleted}='Food' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//table/tbody//input[contains(@value,'${argItemToBeDeleted}')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]</arg>
+</arguments>
+<assign>
+<var>${locDelItem}</var>
+</assign>
+<msg timestamp="20210603 23:25:50.203" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'Food')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]" ]</msg>
+<msg timestamp="20210603 23:25:50.203" level="TRACE">Return: "//table/tbody//input[contains(@value,'Food')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]"</msg>
+<msg timestamp="20210603 23:25:50.203" level="INFO">${locDelItem} = //table/tbody//input[contains(@value,'Food')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]</msg>
+<status status="PASS" starttime="20210603 23:25:50.202" endtime="20210603 23:25:50.203"></status>
+</kw>
+<kw name="Click" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<arguments>
+<arg>${locDelItem}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.204" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'Food')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]" ]</msg>
+<msg timestamp="20210603 23:25:50.204" level="DEBUG">Click options are: {"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}</msg>
+<msg timestamp="20210603 23:25:50.255" level="DEBUG">Clicked element: '//table/tbody//input[contains(@value,'Food')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]' with options: '{"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}'</msg>
+<msg timestamp="20210603 23:25:50.255" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.204" endtime="20210603 23:25:50.255"></status>
+</kw>
+<msg timestamp="20210603 23:25:50.255" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.202" endtime="20210603 23:25:50.255"></status>
+</kw>
+<kw name="Delete Item" library="SidePanelItemValuePO">
+<arguments>
+<arg>${localItemGrooming}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.256" level="TRACE">Arguments: [ ${argItemToBeDeleted}='Grooming/boarding' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//table/tbody//input[contains(@value,'${argItemToBeDeleted}')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]</arg>
+</arguments>
+<assign>
+<var>${locDelItem}</var>
+</assign>
+<msg timestamp="20210603 23:25:50.257" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'Grooming/boarding')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]" ]</msg>
+<msg timestamp="20210603 23:25:50.257" level="TRACE">Return: "//table/tbody//input[contains(@value,'Grooming/boarding')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]"</msg>
+<msg timestamp="20210603 23:25:50.257" level="INFO">${locDelItem} = //table/tbody//input[contains(@value,'Grooming/boarding')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]</msg>
+<status status="PASS" starttime="20210603 23:25:50.257" endtime="20210603 23:25:50.258"></status>
+</kw>
+<kw name="Click" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<arguments>
+<arg>${locDelItem}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.258" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'Grooming/boarding')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]" ]</msg>
+<msg timestamp="20210603 23:25:50.259" level="DEBUG">Click options are: {"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}</msg>
+<msg timestamp="20210603 23:25:50.311" level="DEBUG">Clicked element: '//table/tbody//input[contains(@value,'Grooming/boarding')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]' with options: '{"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}'</msg>
+<msg timestamp="20210603 23:25:50.312" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.258" endtime="20210603 23:25:50.312"></status>
+</kw>
+<msg timestamp="20210603 23:25:50.312" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.256" endtime="20210603 23:25:50.312"></status>
+</kw>
+<kw name="Delete Item" library="SidePanelItemValuePO">
+<arguments>
+<arg>${localItemVetCare}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.313" level="TRACE">Arguments: [ ${argItemToBeDeleted}='Vet care' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//table/tbody//input[contains(@value,'${argItemToBeDeleted}')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]</arg>
+</arguments>
+<assign>
+<var>${locDelItem}</var>
+</assign>
+<msg timestamp="20210603 23:25:50.313" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'Vet care')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]" ]</msg>
+<msg timestamp="20210603 23:25:50.313" level="TRACE">Return: "//table/tbody//input[contains(@value,'Vet care')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]"</msg>
+<msg timestamp="20210603 23:25:50.313" level="INFO">${locDelItem} = //table/tbody//input[contains(@value,'Vet care')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]</msg>
+<status status="PASS" starttime="20210603 23:25:50.313" endtime="20210603 23:25:50.313"></status>
+</kw>
+<kw name="Click" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<arguments>
+<arg>${locDelItem}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.314" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'Vet care')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]" ]</msg>
+<msg timestamp="20210603 23:25:50.314" level="DEBUG">Click options are: {"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}</msg>
+<msg timestamp="20210603 23:25:50.379" level="DEBUG">Clicked element: '//table/tbody//input[contains(@value,'Vet care')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]' with options: '{"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}'</msg>
+<msg timestamp="20210603 23:25:50.380" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.314" endtime="20210603 23:25:50.380"></status>
+</kw>
+<msg timestamp="20210603 23:25:50.380" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.312" endtime="20210603 23:25:50.380"></status>
+</kw>
+<kw name="Delete Item" library="SidePanelItemValuePO">
+<arguments>
+<arg>${localItemOTCCare}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.380" level="TRACE">Arguments: [ ${argItemToBeDeleted}='OTC Care/supplies' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//table/tbody//input[contains(@value,'${argItemToBeDeleted}')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]</arg>
+</arguments>
+<assign>
+<var>${locDelItem}</var>
+</assign>
+<msg timestamp="20210603 23:25:50.381" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'OTC Care/supplies')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]" ]</msg>
+<msg timestamp="20210603 23:25:50.381" level="TRACE">Return: "//table/tbody//input[contains(@value,'OTC Care/supplies')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]"</msg>
+<msg timestamp="20210603 23:25:50.381" level="INFO">${locDelItem} = //table/tbody//input[contains(@value,'OTC Care/supplies')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]</msg>
+<status status="PASS" starttime="20210603 23:25:50.381" endtime="20210603 23:25:50.381"></status>
+</kw>
+<kw name="Click" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<arguments>
+<arg>${locDelItem}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.382" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'OTC Care/supplies')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]" ]</msg>
+<msg timestamp="20210603 23:25:50.383" level="DEBUG">Click options are: {"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}</msg>
+<msg timestamp="20210603 23:25:50.440" level="DEBUG">Clicked element: '//table/tbody//input[contains(@value,'OTC Care/supplies')]/ancestor-or-self::tr//td/button[contains(@class,'delete-button')]' with options: '{"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}'</msg>
+<msg timestamp="20210603 23:25:50.441" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.382" endtime="20210603 23:25:50.441"></status>
+</kw>
+<msg timestamp="20210603 23:25:50.441" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.380" endtime="20210603 23:25:50.441"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>=== Add chart title ===</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.442" level="TRACE">Arguments: [ '=== Add chart title ===' ]</msg>
+<msg timestamp="20210603 23:25:50.442" level="INFO">=== Add chart title ===</msg>
+<msg timestamp="20210603 23:25:50.442" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.441" endtime="20210603 23:25:50.442"></status>
+</kw>
+<kw name="Clear Chart Title" library="SidePanelItemValuePO">
+<msg timestamp="20210603 23:25:50.442" level="TRACE">Arguments: [  ]</msg>
+<kw name="Clear Text" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Clears the text field found by ``selector``.</doc>
+<arguments>
+<arg>${commonLocChartTitle}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.443" level="TRACE">Arguments: [ "//*[@id='chart-title']" ]</msg>
+<msg timestamp="20210603 23:25:50.464" level="DEBUG">Text field cleared.</msg>
+<msg timestamp="20210603 23:25:50.465" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.443" endtime="20210603 23:25:50.465"></status>
+</kw>
+<msg timestamp="20210603 23:25:50.465" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.442" endtime="20210603 23:25:50.465"></status>
+</kw>
+<kw name="Fill Chart Title" library="SidePanelItemValuePO">
+<arguments>
+<arg>${localChartTitle}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.466" level="TRACE">Arguments: [ ${argChartTitle}='test1' ]</msg>
+<kw name="Fill Text" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Clears and fills the given ``text`` into the text field found by ``selector``.</doc>
+<arguments>
+<arg>${commonLocChartTitle}</arg>
+<arg>${argChartTitle}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.466" level="TRACE">Arguments: [ "//*[@id='chart-title']" | 'test1' ]</msg>
+<msg timestamp="20210603 23:25:50.466" level="INFO">Fills the text 'test1' in the given field.</msg>
+<msg timestamp="20210603 23:25:50.489" level="DEBUG">Fill text: test1</msg>
+<msg timestamp="20210603 23:25:50.489" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.466" endtime="20210603 23:25:50.489"></status>
+</kw>
+<msg timestamp="20210603 23:25:50.489" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.465" endtime="20210603 23:25:50.489"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>=== Add items and values ===</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.490" level="TRACE">Arguments: [ '=== Add items and values ===' ]</msg>
+<msg timestamp="20210603 23:25:50.490" level="INFO">=== Add items and values ===</msg>
+<msg timestamp="20210603 23:25:50.490" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.490" endtime="20210603 23:25:50.490"></status>
+</kw>
+<kw name="Select Add Item" library="SidePanelItemValuePO">
+<msg timestamp="20210603 23:25:50.491" level="TRACE">Arguments: [  ]</msg>
+<kw name="Click" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<arguments>
+<arg>${commonLocAddItem}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.491" level="TRACE">Arguments: [ "//button[contains(text(),'Add Item')]" ]</msg>
+<msg timestamp="20210603 23:25:50.492" level="DEBUG">Click options are: {"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}</msg>
+<msg timestamp="20210603 23:25:50.548" level="DEBUG">Clicked element: '//button[contains(text(),'Add Item')]' with options: '{"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}'</msg>
+<msg timestamp="20210603 23:25:50.548" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.491" endtime="20210603 23:25:50.549"></status>
+</kw>
+<msg timestamp="20210603 23:25:50.549" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.491" endtime="20210603 23:25:50.549"></status>
+</kw>
+<kw name="Add Item" library="SidePanelItemValuePO">
+<arguments>
+<arg>${localItem1}</arg>
+<arg>argRow=2</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.550" level="TRACE">Arguments: [ ${argItemToBeAdded}='item1' | ${argRow}='2' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//table/tbody//tr[${argRow}]//input[contains(@placeholder, 'Type to add ...')]</arg>
+</arguments>
+<assign>
+<var>${locAddItem}</var>
+</assign>
+<msg timestamp="20210603 23:25:50.550" level="TRACE">Arguments: [ "//table/tbody//tr[2]//input[contains(@placeholder, 'Type to add ...')]" ]</msg>
+<msg timestamp="20210603 23:25:50.550" level="TRACE">Return: "//table/tbody//tr[2]//input[contains(@placeholder, 'Type to add ...')]"</msg>
+<msg timestamp="20210603 23:25:50.550" level="INFO">${locAddItem} = //table/tbody//tr[2]//input[contains(@placeholder, 'Type to add ...')]</msg>
+<status status="PASS" starttime="20210603 23:25:50.550" endtime="20210603 23:25:50.550"></status>
+</kw>
+<kw name="Wait For Elements State" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+</tags>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<arguments>
+<arg>${locAddItem}</arg>
+<arg>state=visible</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.551" level="TRACE">Arguments: [ "//table/tbody//tr[2]//input[contains(@placeholder, 'Type to add ...')]" | state=&lt;ElementState.visible: 3&gt; ]</msg>
+<msg timestamp="20210603 23:25:50.560" level="INFO">Wait for Element with selector: //table/tbody//tr[2]//input[contains(@placeholder, 'Type to add ...')]</msg>
+<msg timestamp="20210603 23:25:50.560" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.551" endtime="20210603 23:25:50.561"></status>
+</kw>
+<kw name="Fill Text" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Clears and fills the given ``text`` into the text field found by ``selector``.</doc>
+<arguments>
+<arg>${locAddItem}</arg>
+<arg>${argItemToBeAdded}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.562" level="TRACE">Arguments: [ "//table/tbody//tr[2]//input[contains(@placeholder, 'Type to add ...')]" | 'item1' ]</msg>
+<msg timestamp="20210603 23:25:50.562" level="INFO">Fills the text 'item1' in the given field.</msg>
+<msg timestamp="20210603 23:25:50.595" level="DEBUG">Fill text: item1</msg>
+<msg timestamp="20210603 23:25:50.595" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.561" endtime="20210603 23:25:50.595"></status>
+</kw>
+<msg timestamp="20210603 23:25:50.595" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.549" endtime="20210603 23:25:50.596"></status>
+</kw>
+<kw name="Add Item Value" library="SidePanelItemValuePO">
+<arguments>
+<arg>${localItem1}</arg>
+<arg>20</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.596" level="TRACE">Arguments: [ ${argItem}='item1' | ${argItemValue}='20' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//table/tbody//input[contains(@value,'${argItem}')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]</arg>
+</arguments>
+<assign>
+<var>${locAddItemValue}</var>
+</assign>
+<msg timestamp="20210603 23:25:50.597" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'item1')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]" ]</msg>
+<msg timestamp="20210603 23:25:50.597" level="TRACE">Return: "//table/tbody//input[contains(@value,'item1')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]"</msg>
+<msg timestamp="20210603 23:25:50.597" level="INFO">${locAddItemValue} = //table/tbody//input[contains(@value,'item1')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]</msg>
+<status status="PASS" starttime="20210603 23:25:50.596" endtime="20210603 23:25:50.597"></status>
+</kw>
+<kw name="Click" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<arguments>
+<arg>${locAddItemValue}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.597" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'item1')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]" ]</msg>
+<msg timestamp="20210603 23:25:50.598" level="DEBUG">Click options are: {"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}</msg>
+<msg timestamp="20210603 23:25:50.636" level="DEBUG">Clicked element: '//table/tbody//input[contains(@value,'item1')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]' with options: '{"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}'</msg>
+<msg timestamp="20210603 23:25:50.636" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.597" endtime="20210603 23:25:50.636"></status>
+</kw>
+<kw name="Clear Text" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Clears the text field found by ``selector``.</doc>
+<arguments>
+<arg>${locAddItemValue}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.637" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'item1')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]" ]</msg>
+<msg timestamp="20210603 23:25:50.652" level="DEBUG">Text field cleared.</msg>
+<msg timestamp="20210603 23:25:50.653" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.637" endtime="20210603 23:25:50.653"></status>
+</kw>
+<kw name="Fill Text" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Clears and fills the given ``text`` into the text field found by ``selector``.</doc>
+<arguments>
+<arg>${locAddItemValue}</arg>
+<arg>${argItemValue}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.655" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'item1')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]" | '20' ]</msg>
+<msg timestamp="20210603 23:25:50.655" level="INFO">Fills the text '20' in the given field.</msg>
+<msg timestamp="20210603 23:25:50.675" level="DEBUG">Fill text: 20</msg>
+<msg timestamp="20210603 23:25:50.676" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.654" endtime="20210603 23:25:50.676"></status>
+</kw>
+<msg timestamp="20210603 23:25:50.676" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.596" endtime="20210603 23:25:50.677"></status>
+</kw>
+<kw name="Select Add Item" library="SidePanelItemValuePO">
+<msg timestamp="20210603 23:25:50.677" level="TRACE">Arguments: [  ]</msg>
+<kw name="Click" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<arguments>
+<arg>${commonLocAddItem}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.679" level="TRACE">Arguments: [ "//button[contains(text(),'Add Item')]" ]</msg>
+<msg timestamp="20210603 23:25:50.679" level="DEBUG">Click options are: {"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}</msg>
+<msg timestamp="20210603 23:25:50.740" level="DEBUG">Clicked element: '//button[contains(text(),'Add Item')]' with options: '{"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}'</msg>
+<msg timestamp="20210603 23:25:50.740" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.678" endtime="20210603 23:25:50.740"></status>
+</kw>
+<msg timestamp="20210603 23:25:50.741" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.677" endtime="20210603 23:25:50.741"></status>
+</kw>
+<kw name="Add Item" library="SidePanelItemValuePO">
+<arguments>
+<arg>${localItem2}</arg>
+<arg>argRow=3</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.742" level="TRACE">Arguments: [ ${argItemToBeAdded}='item2' | ${argRow}='3' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//table/tbody//tr[${argRow}]//input[contains(@placeholder, 'Type to add ...')]</arg>
+</arguments>
+<assign>
+<var>${locAddItem}</var>
+</assign>
+<msg timestamp="20210603 23:25:50.742" level="TRACE">Arguments: [ "//table/tbody//tr[3]//input[contains(@placeholder, 'Type to add ...')]" ]</msg>
+<msg timestamp="20210603 23:25:50.743" level="TRACE">Return: "//table/tbody//tr[3]//input[contains(@placeholder, 'Type to add ...')]"</msg>
+<msg timestamp="20210603 23:25:50.743" level="INFO">${locAddItem} = //table/tbody//tr[3]//input[contains(@placeholder, 'Type to add ...')]</msg>
+<status status="PASS" starttime="20210603 23:25:50.742" endtime="20210603 23:25:50.743"></status>
+</kw>
+<kw name="Wait For Elements State" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+</tags>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<arguments>
+<arg>${locAddItem}</arg>
+<arg>state=visible</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.743" level="TRACE">Arguments: [ "//table/tbody//tr[3]//input[contains(@placeholder, 'Type to add ...')]" | state=&lt;ElementState.visible: 3&gt; ]</msg>
+<msg timestamp="20210603 23:25:50.753" level="INFO">Wait for Element with selector: //table/tbody//tr[3]//input[contains(@placeholder, 'Type to add ...')]</msg>
+<msg timestamp="20210603 23:25:50.753" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.743" endtime="20210603 23:25:50.754"></status>
+</kw>
+<kw name="Fill Text" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Clears and fills the given ``text`` into the text field found by ``selector``.</doc>
+<arguments>
+<arg>${locAddItem}</arg>
+<arg>${argItemToBeAdded}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.755" level="TRACE">Arguments: [ "//table/tbody//tr[3]//input[contains(@placeholder, 'Type to add ...')]" | 'item2' ]</msg>
+<msg timestamp="20210603 23:25:50.756" level="INFO">Fills the text 'item2' in the given field.</msg>
+<msg timestamp="20210603 23:25:50.784" level="DEBUG">Fill text: item2</msg>
+<msg timestamp="20210603 23:25:50.784" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.754" endtime="20210603 23:25:50.784"></status>
+</kw>
+<msg timestamp="20210603 23:25:50.785" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.741" endtime="20210603 23:25:50.785"></status>
+</kw>
+<kw name="Add Item Value" library="SidePanelItemValuePO">
+<arguments>
+<arg>${localItem2}</arg>
+<arg>10</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.786" level="TRACE">Arguments: [ ${argItem}='item2' | ${argItemValue}='10' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//table/tbody//input[contains(@value,'${argItem}')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]</arg>
+</arguments>
+<assign>
+<var>${locAddItemValue}</var>
+</assign>
+<msg timestamp="20210603 23:25:50.786" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'item2')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]" ]</msg>
+<msg timestamp="20210603 23:25:50.786" level="TRACE">Return: "//table/tbody//input[contains(@value,'item2')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]"</msg>
+<msg timestamp="20210603 23:25:50.786" level="INFO">${locAddItemValue} = //table/tbody//input[contains(@value,'item2')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]</msg>
+<status status="PASS" starttime="20210603 23:25:50.786" endtime="20210603 23:25:50.786"></status>
+</kw>
+<kw name="Click" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<arguments>
+<arg>${locAddItemValue}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.787" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'item2')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]" ]</msg>
+<msg timestamp="20210603 23:25:50.788" level="DEBUG">Click options are: {"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}</msg>
+<msg timestamp="20210603 23:25:50.821" level="DEBUG">Clicked element: '//table/tbody//input[contains(@value,'item2')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]' with options: '{"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}'</msg>
+<msg timestamp="20210603 23:25:50.821" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.787" endtime="20210603 23:25:50.821"></status>
+</kw>
+<kw name="Clear Text" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Clears the text field found by ``selector``.</doc>
+<arguments>
+<arg>${locAddItemValue}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.822" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'item2')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]" ]</msg>
+<msg timestamp="20210603 23:25:50.843" level="DEBUG">Text field cleared.</msg>
+<msg timestamp="20210603 23:25:50.843" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.821" endtime="20210603 23:25:50.843"></status>
+</kw>
+<kw name="Fill Text" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Clears and fills the given ``text`` into the text field found by ``selector``.</doc>
+<arguments>
+<arg>${locAddItemValue}</arg>
+<arg>${argItemValue}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.844" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'item2')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]" | '10' ]</msg>
+<msg timestamp="20210603 23:25:50.844" level="INFO">Fills the text '10' in the given field.</msg>
+<msg timestamp="20210603 23:25:50.868" level="DEBUG">Fill text: 10</msg>
+<msg timestamp="20210603 23:25:50.869" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.844" endtime="20210603 23:25:50.869"></status>
+</kw>
+<msg timestamp="20210603 23:25:50.869" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.785" endtime="20210603 23:25:50.869"></status>
+</kw>
+<kw name="Select Add Item" library="SidePanelItemValuePO">
+<msg timestamp="20210603 23:25:50.870" level="TRACE">Arguments: [  ]</msg>
+<kw name="Click" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<arguments>
+<arg>${commonLocAddItem}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.870" level="TRACE">Arguments: [ "//button[contains(text(),'Add Item')]" ]</msg>
+<msg timestamp="20210603 23:25:50.871" level="DEBUG">Click options are: {"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}</msg>
+<msg timestamp="20210603 23:25:50.923" level="DEBUG">Clicked element: '//button[contains(text(),'Add Item')]' with options: '{"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}'</msg>
+<msg timestamp="20210603 23:25:50.924" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.870" endtime="20210603 23:25:50.924"></status>
+</kw>
+<msg timestamp="20210603 23:25:50.924" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.870" endtime="20210603 23:25:50.924"></status>
+</kw>
+<kw name="Add Item" library="SidePanelItemValuePO">
+<arguments>
+<arg>${localItem3}</arg>
+<arg>argRow=4</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.925" level="TRACE">Arguments: [ ${argItemToBeAdded}='item3' | ${argRow}='4' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//table/tbody//tr[${argRow}]//input[contains(@placeholder, 'Type to add ...')]</arg>
+</arguments>
+<assign>
+<var>${locAddItem}</var>
+</assign>
+<msg timestamp="20210603 23:25:50.926" level="TRACE">Arguments: [ "//table/tbody//tr[4]//input[contains(@placeholder, 'Type to add ...')]" ]</msg>
+<msg timestamp="20210603 23:25:50.926" level="TRACE">Return: "//table/tbody//tr[4]//input[contains(@placeholder, 'Type to add ...')]"</msg>
+<msg timestamp="20210603 23:25:50.926" level="INFO">${locAddItem} = //table/tbody//tr[4]//input[contains(@placeholder, 'Type to add ...')]</msg>
+<status status="PASS" starttime="20210603 23:25:50.925" endtime="20210603 23:25:50.926"></status>
+</kw>
+<kw name="Wait For Elements State" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+</tags>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<arguments>
+<arg>${locAddItem}</arg>
+<arg>state=visible</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.926" level="TRACE">Arguments: [ "//table/tbody//tr[4]//input[contains(@placeholder, 'Type to add ...')]" | state=&lt;ElementState.visible: 3&gt; ]</msg>
+<msg timestamp="20210603 23:25:50.933" level="INFO">Wait for Element with selector: //table/tbody//tr[4]//input[contains(@placeholder, 'Type to add ...')]</msg>
+<msg timestamp="20210603 23:25:50.933" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.926" endtime="20210603 23:25:50.933"></status>
+</kw>
+<kw name="Fill Text" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Clears and fills the given ``text`` into the text field found by ``selector``.</doc>
+<arguments>
+<arg>${locAddItem}</arg>
+<arg>${argItemToBeAdded}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.934" level="TRACE">Arguments: [ "//table/tbody//tr[4]//input[contains(@placeholder, 'Type to add ...')]" | 'item3' ]</msg>
+<msg timestamp="20210603 23:25:50.934" level="INFO">Fills the text 'item3' in the given field.</msg>
+<msg timestamp="20210603 23:25:50.963" level="DEBUG">Fill text: item3</msg>
+<msg timestamp="20210603 23:25:50.963" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.933" endtime="20210603 23:25:50.963"></status>
+</kw>
+<msg timestamp="20210603 23:25:50.963" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.924" endtime="20210603 23:25:50.963"></status>
+</kw>
+<kw name="Add Item Value" library="SidePanelItemValuePO">
+<arguments>
+<arg>${localItem3}</arg>
+<arg>50</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.964" level="TRACE">Arguments: [ ${argItem}='item3' | ${argItemValue}='50' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//table/tbody//input[contains(@value,'${argItem}')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]</arg>
+</arguments>
+<assign>
+<var>${locAddItemValue}</var>
+</assign>
+<msg timestamp="20210603 23:25:50.964" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'item3')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]" ]</msg>
+<msg timestamp="20210603 23:25:50.965" level="TRACE">Return: "//table/tbody//input[contains(@value,'item3')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]"</msg>
+<msg timestamp="20210603 23:25:50.965" level="INFO">${locAddItemValue} = //table/tbody//input[contains(@value,'item3')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]</msg>
+<status status="PASS" starttime="20210603 23:25:50.964" endtime="20210603 23:25:50.965"></status>
+</kw>
+<kw name="Click" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<arguments>
+<arg>${locAddItemValue}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:50.965" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'item3')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]" ]</msg>
+<msg timestamp="20210603 23:25:50.966" level="DEBUG">Click options are: {"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}</msg>
+<msg timestamp="20210603 23:25:51.004" level="DEBUG">Clicked element: '//table/tbody//input[contains(@value,'item3')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]' with options: '{"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}'</msg>
+<msg timestamp="20210603 23:25:51.004" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.965" endtime="20210603 23:25:51.004"></status>
+</kw>
+<kw name="Clear Text" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Clears the text field found by ``selector``.</doc>
+<arguments>
+<arg>${locAddItemValue}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.005" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'item3')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]" ]</msg>
+<msg timestamp="20210603 23:25:51.024" level="DEBUG">Text field cleared.</msg>
+<msg timestamp="20210603 23:25:51.025" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.004" endtime="20210603 23:25:51.025"></status>
+</kw>
+<kw name="Fill Text" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Clears and fills the given ``text`` into the text field found by ``selector``.</doc>
+<arguments>
+<arg>${locAddItemValue}</arg>
+<arg>${argItemValue}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.026" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'item3')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]" | '50' ]</msg>
+<msg timestamp="20210603 23:25:51.026" level="INFO">Fills the text '50' in the given field.</msg>
+<msg timestamp="20210603 23:25:51.048" level="DEBUG">Fill text: 50</msg>
+<msg timestamp="20210603 23:25:51.048" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.026" endtime="20210603 23:25:51.049"></status>
+</kw>
+<msg timestamp="20210603 23:25:51.049" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:50.964" endtime="20210603 23:25:51.049"></status>
+</kw>
+<kw name="Select Add Item" library="SidePanelItemValuePO">
+<msg timestamp="20210603 23:25:51.050" level="TRACE">Arguments: [  ]</msg>
+<kw name="Click" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<arguments>
+<arg>${commonLocAddItem}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.051" level="TRACE">Arguments: [ "//button[contains(text(),'Add Item')]" ]</msg>
+<msg timestamp="20210603 23:25:51.051" level="DEBUG">Click options are: {"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}</msg>
+<msg timestamp="20210603 23:25:51.110" level="DEBUG">Clicked element: '//button[contains(text(),'Add Item')]' with options: '{"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}'</msg>
+<msg timestamp="20210603 23:25:51.110" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.051" endtime="20210603 23:25:51.110"></status>
+</kw>
+<msg timestamp="20210603 23:25:51.111" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.049" endtime="20210603 23:25:51.111"></status>
+</kw>
+<kw name="Add Item" library="SidePanelItemValuePO">
+<arguments>
+<arg>${localItem4}</arg>
+<arg>argRow=5</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.112" level="TRACE">Arguments: [ ${argItemToBeAdded}='item4' | ${argRow}='5' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//table/tbody//tr[${argRow}]//input[contains(@placeholder, 'Type to add ...')]</arg>
+</arguments>
+<assign>
+<var>${locAddItem}</var>
+</assign>
+<msg timestamp="20210603 23:25:51.112" level="TRACE">Arguments: [ "//table/tbody//tr[5]//input[contains(@placeholder, 'Type to add ...')]" ]</msg>
+<msg timestamp="20210603 23:25:51.113" level="TRACE">Return: "//table/tbody//tr[5]//input[contains(@placeholder, 'Type to add ...')]"</msg>
+<msg timestamp="20210603 23:25:51.113" level="INFO">${locAddItem} = //table/tbody//tr[5]//input[contains(@placeholder, 'Type to add ...')]</msg>
+<status status="PASS" starttime="20210603 23:25:51.112" endtime="20210603 23:25:51.113"></status>
+</kw>
+<kw name="Wait For Elements State" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+</tags>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<arguments>
+<arg>${locAddItem}</arg>
+<arg>state=visible</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.114" level="TRACE">Arguments: [ "//table/tbody//tr[5]//input[contains(@placeholder, 'Type to add ...')]" | state=&lt;ElementState.visible: 3&gt; ]</msg>
+<msg timestamp="20210603 23:25:51.121" level="INFO">Wait for Element with selector: //table/tbody//tr[5]//input[contains(@placeholder, 'Type to add ...')]</msg>
+<msg timestamp="20210603 23:25:51.121" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.113" endtime="20210603 23:25:51.121"></status>
+</kw>
+<kw name="Fill Text" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Clears and fills the given ``text`` into the text field found by ``selector``.</doc>
+<arguments>
+<arg>${locAddItem}</arg>
+<arg>${argItemToBeAdded}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.122" level="TRACE">Arguments: [ "//table/tbody//tr[5]//input[contains(@placeholder, 'Type to add ...')]" | 'item4' ]</msg>
+<msg timestamp="20210603 23:25:51.122" level="INFO">Fills the text 'item4' in the given field.</msg>
+<msg timestamp="20210603 23:25:51.157" level="DEBUG">Fill text: item4</msg>
+<msg timestamp="20210603 23:25:51.157" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.122" endtime="20210603 23:25:51.157"></status>
+</kw>
+<msg timestamp="20210603 23:25:51.157" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.111" endtime="20210603 23:25:51.158"></status>
+</kw>
+<kw name="Add Item Value" library="SidePanelItemValuePO">
+<arguments>
+<arg>${localItem4}</arg>
+<arg>5</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.158" level="TRACE">Arguments: [ ${argItem}='item4' | ${argItemValue}='5' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//table/tbody//input[contains(@value,'${argItem}')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]</arg>
+</arguments>
+<assign>
+<var>${locAddItemValue}</var>
+</assign>
+<msg timestamp="20210603 23:25:51.159" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'item4')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]" ]</msg>
+<msg timestamp="20210603 23:25:51.159" level="TRACE">Return: "//table/tbody//input[contains(@value,'item4')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]"</msg>
+<msg timestamp="20210603 23:25:51.159" level="INFO">${locAddItemValue} = //table/tbody//input[contains(@value,'item4')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]</msg>
+<status status="PASS" starttime="20210603 23:25:51.158" endtime="20210603 23:25:51.159"></status>
+</kw>
+<kw name="Click" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<arguments>
+<arg>${locAddItemValue}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.159" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'item4')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]" ]</msg>
+<msg timestamp="20210603 23:25:51.160" level="DEBUG">Click options are: {"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}</msg>
+<msg timestamp="20210603 23:25:51.186" level="DEBUG">Clicked element: '//table/tbody//input[contains(@value,'item4')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]' with options: '{"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}'</msg>
+<msg timestamp="20210603 23:25:51.186" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.159" endtime="20210603 23:25:51.186"></status>
+</kw>
+<kw name="Clear Text" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Clears the text field found by ``selector``.</doc>
+<arguments>
+<arg>${locAddItemValue}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.187" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'item4')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]" ]</msg>
+<msg timestamp="20210603 23:25:51.210" level="DEBUG">Text field cleared.</msg>
+<msg timestamp="20210603 23:25:51.210" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.187" endtime="20210603 23:25:51.210"></status>
+</kw>
+<kw name="Fill Text" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Clears and fills the given ``text`` into the text field found by ``selector``.</doc>
+<arguments>
+<arg>${locAddItemValue}</arg>
+<arg>${argItemValue}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.211" level="TRACE">Arguments: [ "//table/tbody//input[contains(@value,'item4')]/ancestor-or-self::tr//td/input[contains(@class, 'item-value-input')]" | '5' ]</msg>
+<msg timestamp="20210603 23:25:51.211" level="INFO">Fills the text '5' in the given field.</msg>
+<msg timestamp="20210603 23:25:51.240" level="DEBUG">Fill text: 5</msg>
+<msg timestamp="20210603 23:25:51.240" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.210" endtime="20210603 23:25:51.241"></status>
+</kw>
+<msg timestamp="20210603 23:25:51.241" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.158" endtime="20210603 23:25:51.241"></status>
+</kw>
+<kw name="Navigate To Design" library="NavigationTabsPO">
+<msg timestamp="20210603 23:25:51.242" level="TRACE">Arguments: [  ]</msg>
+<kw name="Click" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<arguments>
+<arg>${commonLocDesignTab}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.242" level="TRACE">Arguments: [ "//button[contains(text(),'Design')]" ]</msg>
+<msg timestamp="20210603 23:25:51.242" level="DEBUG">Click options are: {"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}</msg>
+<msg timestamp="20210603 23:25:51.301" level="DEBUG">Clicked element: '//button[contains(text(),'Design')]' with options: '{"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}'</msg>
+<msg timestamp="20210603 23:25:51.302" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.242" endtime="20210603 23:25:51.302"></status>
+</kw>
+<msg timestamp="20210603 23:25:51.302" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.241" endtime="20210603 23:25:51.302"></status>
+</kw>
+<kw name="Select Chart Type" library="DesignPanelContainerPO">
+<arguments>
+<arg>Bar chart</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.303" level="TRACE">Arguments: [ ${argChart}='Bar chart' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//*[contains(@class,'LayoutsPanelContainer')]//button[contains(text(),'${argChart}')]</arg>
+</arguments>
+<assign>
+<var>${locChart}</var>
+</assign>
+<msg timestamp="20210603 23:25:51.303" level="TRACE">Arguments: [ "//*[contains(@class,'LayoutsPanelContainer')]//button[contains(text(),'Bar chart')]" ]</msg>
+<msg timestamp="20210603 23:25:51.304" level="TRACE">Return: "//*[contains(@class,'LayoutsPanelContainer')]//button[contains(text(),'Bar chart')]"</msg>
+<msg timestamp="20210603 23:25:51.304" level="INFO">${locChart} = //*[contains(@class,'LayoutsPanelContainer')]//button[contains(text(),'Bar chart')]</msg>
+<status status="PASS" starttime="20210603 23:25:51.303" endtime="20210603 23:25:51.304"></status>
+</kw>
+<kw name="Click" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+</tags>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<arguments>
+<arg>${locChart}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.306" level="TRACE">Arguments: [ "//*[contains(@class,'LayoutsPanelContainer')]//button[contains(text(),'Bar chart')]" ]</msg>
+<msg timestamp="20210603 23:25:51.306" level="DEBUG">Click options are: {"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}</msg>
+<msg timestamp="20210603 23:25:51.499" level="DEBUG">Clicked element: '//*[contains(@class,'LayoutsPanelContainer')]//button[contains(text(),'Bar chart')]' with options: '{"button": "left", "clickCount": 1, "force": false, "noWaitAfter": false}'</msg>
+<msg timestamp="20210603 23:25:51.500" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.305" endtime="20210603 23:25:51.500"></status>
+</kw>
+<msg timestamp="20210603 23:25:51.500" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.302" endtime="20210603 23:25:51.500"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>=== Verify Bar chart entries ===</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.500" level="TRACE">Arguments: [ '=== Verify Bar chart entries ===' ]</msg>
+<msg timestamp="20210603 23:25:51.500" level="INFO">=== Verify Bar chart entries ===</msg>
+<msg timestamp="20210603 23:25:51.500" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.500" endtime="20210603 23:25:51.500"></status>
+</kw>
+<kw name="Verify Identical Color Count" library="ChartLayoutPO">
+<arguments>
+<arg>1</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.501" level="TRACE">Arguments: [ ${argCount}='1' ]</msg>
+<kw name="Get Element Count" library="Browser">
+<tags>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<arguments>
+<arg>${locIdenticalColor}</arg>
+<arg>==</arg>
+<arg>${argCount}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.502" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(@fill,'#20336e')]" | &lt;AssertionOperator.equal: '=='&gt; | '1' ]</msg>
+<msg timestamp="20210603 23:25:51.510" level="DEBUG">Assertion polling statistics:
+First element asserted in: 0.006803989410400391 seconds
+Total tries: 1
+Elapsed time in retries 0.0 seconds</msg>
+<msg timestamp="20210603 23:25:51.510" level="TRACE">Return: 1</msg>
+<status status="PASS" starttime="20210603 23:25:51.501" endtime="20210603 23:25:51.510"></status>
+</kw>
+<msg timestamp="20210603 23:25:51.510" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.501" endtime="20210603 23:25:51.511"></status>
+</kw>
+<kw name="Verify Bar Chart Identical Color" library="ChartLayoutPO">
+<arguments>
+<arg>15</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.511" level="TRACE">Arguments: [ ${argCount}='15' ]</msg>
+<kw name="Get Element Count" library="Browser">
+<tags>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<arguments>
+<arg>${locBarChartIdentical}</arg>
+<arg>==</arg>
+<arg>${argCount}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.511" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(@fill,'#7b8288')]" | &lt;AssertionOperator.equal: '=='&gt; | '15' ]</msg>
+<msg timestamp="20210603 23:25:51.524" level="DEBUG">Assertion polling statistics:
+First element asserted in: 0.012153863906860352 seconds
+Total tries: 1
+Elapsed time in retries 0.0 seconds</msg>
+<msg timestamp="20210603 23:25:51.524" level="TRACE">Return: 15</msg>
+<status status="PASS" starttime="20210603 23:25:51.511" endtime="20210603 23:25:51.525"></status>
+</kw>
+<msg timestamp="20210603 23:25:51.525" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.511" endtime="20210603 23:25:51.525"></status>
+</kw>
+<kw name="Verify Bars On Graph" library="ChartLayoutPO">
+<arguments>
+<arg>4</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.526" level="TRACE">Arguments: [ ${argCount}='4' ]</msg>
+<kw name="Get Element Count" library="Browser">
+<tags>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+</tags>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<arguments>
+<arg>${locBars}</arg>
+<arg>==</arg>
+<arg>${argCount}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.526" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(@fill,'#86ddd4')]" | &lt;AssertionOperator.equal: '=='&gt; | '4' ]</msg>
+<msg timestamp="20210603 23:25:51.532" level="DEBUG">Assertion polling statistics:
+First element asserted in: 0.0049991607666015625 seconds
+Total tries: 1
+Elapsed time in retries 0.0 seconds</msg>
+<msg timestamp="20210603 23:25:51.533" level="TRACE">Return: 4</msg>
+<status status="PASS" starttime="20210603 23:25:51.526" endtime="20210603 23:25:51.533"></status>
+</kw>
+<msg timestamp="20210603 23:25:51.533" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.525" endtime="20210603 23:25:51.533"></status>
+</kw>
+<kw name="Verify Chart Contains Items" library="ChartLayoutPO">
+<arguments>
+<arg>${localItem1}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.534" level="TRACE">Arguments: [ ${argItem}='item1' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//div[contains(@class,'layout')]//*[contains(text(),'${argItem}')]</arg>
+</arguments>
+<assign>
+<var>${locChartItem}</var>
+</assign>
+<msg timestamp="20210603 23:25:51.534" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(text(),'item1')]" ]</msg>
+<msg timestamp="20210603 23:25:51.535" level="TRACE">Return: "//div[contains(@class,'layout')]//*[contains(text(),'item1')]"</msg>
+<msg timestamp="20210603 23:25:51.535" level="INFO">${locChartItem} = //div[contains(@class,'layout')]//*[contains(text(),'item1')]</msg>
+<status status="PASS" starttime="20210603 23:25:51.534" endtime="20210603 23:25:51.535"></status>
+</kw>
+<kw name="Wait For Elements State" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+</tags>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<arguments>
+<arg>${locChartItem}</arg>
+<arg>state=visible</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.535" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(text(),'item1')]" | state=&lt;ElementState.visible: 3&gt; ]</msg>
+<msg timestamp="20210603 23:25:51.542" level="INFO">Wait for Element with selector: //div[contains(@class,'layout')]//*[contains(text(),'item1')]</msg>
+<msg timestamp="20210603 23:25:51.542" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.535" endtime="20210603 23:25:51.543"></status>
+</kw>
+<msg timestamp="20210603 23:25:51.543" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.534" endtime="20210603 23:25:51.543"></status>
+</kw>
+<kw name="Verify Chart Contains Items" library="ChartLayoutPO">
+<arguments>
+<arg>${localItem2}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.543" level="TRACE">Arguments: [ ${argItem}='item2' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//div[contains(@class,'layout')]//*[contains(text(),'${argItem}')]</arg>
+</arguments>
+<assign>
+<var>${locChartItem}</var>
+</assign>
+<msg timestamp="20210603 23:25:51.544" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(text(),'item2')]" ]</msg>
+<msg timestamp="20210603 23:25:51.544" level="TRACE">Return: "//div[contains(@class,'layout')]//*[contains(text(),'item2')]"</msg>
+<msg timestamp="20210603 23:25:51.544" level="INFO">${locChartItem} = //div[contains(@class,'layout')]//*[contains(text(),'item2')]</msg>
+<status status="PASS" starttime="20210603 23:25:51.544" endtime="20210603 23:25:51.544"></status>
+</kw>
+<kw name="Wait For Elements State" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+</tags>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<arguments>
+<arg>${locChartItem}</arg>
+<arg>state=visible</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.545" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(text(),'item2')]" | state=&lt;ElementState.visible: 3&gt; ]</msg>
+<msg timestamp="20210603 23:25:51.552" level="INFO">Wait for Element with selector: //div[contains(@class,'layout')]//*[contains(text(),'item2')]</msg>
+<msg timestamp="20210603 23:25:51.552" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.545" endtime="20210603 23:25:51.553"></status>
+</kw>
+<msg timestamp="20210603 23:25:51.553" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.543" endtime="20210603 23:25:51.553"></status>
+</kw>
+<kw name="Verify Chart Contains Items" library="ChartLayoutPO">
+<arguments>
+<arg>${localItem3}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.554" level="TRACE">Arguments: [ ${argItem}='item3' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//div[contains(@class,'layout')]//*[contains(text(),'${argItem}')]</arg>
+</arguments>
+<assign>
+<var>${locChartItem}</var>
+</assign>
+<msg timestamp="20210603 23:25:51.554" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(text(),'item3')]" ]</msg>
+<msg timestamp="20210603 23:25:51.554" level="TRACE">Return: "//div[contains(@class,'layout')]//*[contains(text(),'item3')]"</msg>
+<msg timestamp="20210603 23:25:51.554" level="INFO">${locChartItem} = //div[contains(@class,'layout')]//*[contains(text(),'item3')]</msg>
+<status status="PASS" starttime="20210603 23:25:51.554" endtime="20210603 23:25:51.554"></status>
+</kw>
+<kw name="Wait For Elements State" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+</tags>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<arguments>
+<arg>${locChartItem}</arg>
+<arg>state=visible</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.555" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(text(),'item3')]" | state=&lt;ElementState.visible: 3&gt; ]</msg>
+<msg timestamp="20210603 23:25:51.562" level="INFO">Wait for Element with selector: //div[contains(@class,'layout')]//*[contains(text(),'item3')]</msg>
+<msg timestamp="20210603 23:25:51.562" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.555" endtime="20210603 23:25:51.563"></status>
+</kw>
+<msg timestamp="20210603 23:25:51.563" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.553" endtime="20210603 23:25:51.563"></status>
+</kw>
+<kw name="Verify Chart Contains Items" library="ChartLayoutPO">
+<arguments>
+<arg>${localItem4}</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.564" level="TRACE">Arguments: [ ${argItem}='item4' ]</msg>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>//div[contains(@class,'layout')]//*[contains(text(),'${argItem}')]</arg>
+</arguments>
+<assign>
+<var>${locChartItem}</var>
+</assign>
+<msg timestamp="20210603 23:25:51.564" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(text(),'item4')]" ]</msg>
+<msg timestamp="20210603 23:25:51.564" level="TRACE">Return: "//div[contains(@class,'layout')]//*[contains(text(),'item4')]"</msg>
+<msg timestamp="20210603 23:25:51.564" level="INFO">${locChartItem} = //div[contains(@class,'layout')]//*[contains(text(),'item4')]</msg>
+<status status="PASS" starttime="20210603 23:25:51.564" endtime="20210603 23:25:51.564"></status>
+</kw>
+<kw name="Wait For Elements State" library="Browser">
+<tags>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+</tags>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<arguments>
+<arg>${locChartItem}</arg>
+<arg>state=visible</arg>
+</arguments>
+<msg timestamp="20210603 23:25:51.565" level="TRACE">Arguments: [ "//div[contains(@class,'layout')]//*[contains(text(),'item4')]" | state=&lt;ElementState.visible: 3&gt; ]</msg>
+<msg timestamp="20210603 23:25:51.572" level="INFO">Wait for Element with selector: //div[contains(@class,'layout')]//*[contains(text(),'item4')]</msg>
+<msg timestamp="20210603 23:25:51.572" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.565" endtime="20210603 23:25:51.572"></status>
+</kw>
+<msg timestamp="20210603 23:25:51.572" level="TRACE">Return: None</msg>
+<status status="PASS" starttime="20210603 23:25:51.563" endtime="20210603 23:25:51.572"></status>
+</kw>
+<status status="PASS" starttime="20210603 23:25:48.380" endtime="20210603 23:25:51.573" critical="yes"></status>
+</test>
+<status status="PASS" starttime="20210603 23:25:48.358" endtime="20210603 23:25:51.745"></status>
+</suite>
+<status status="PASS" starttime="20210603 23:25:48.330" endtime="20210603 23:25:51.749"></status>
+</suite>
+<status status="PASS" starttime="20210603 23:25:44.105" endtime="20210603 23:25:51.752"></status>
+</suite>
+<status status="PASS" starttime="20210603 23:25:44.101" endtime="20210603 23:25:51.757"></status>
+</suite>
+<status status="PASS" starttime="20210603 23:25:42.866" endtime="20210603 23:25:51.772"></status>
+</suite>
+<statistics>
+<total>
+<stat pass="2" fail="0">Critical Tasks</stat>
+<stat pass="2" fail="0">All Tasks</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="2" fail="0" id="s1" name="ChartGeneration">ChartGeneration</stat>
+<stat pass="2" fail="0" id="s1-s1" name="ChartGenerationUI">ChartGeneration.ChartGenerationUI</stat>
+<stat pass="2" fail="0" id="s1-s1-s1" name="Tests">ChartGeneration.ChartGenerationUI.Tests</stat>
+<stat pass="1" fail="0" id="s1-s1-s1-s1" name="Content">ChartGeneration.ChartGenerationUI.Tests.Content</stat>
+<stat pass="1" fail="0" id="s1-s1-s1-s1-s1" name="PieChartItems">ChartGeneration.ChartGenerationUI.Tests.Content.PieChartItems</stat>
+<stat pass="1" fail="0" id="s1-s1-s1-s2" name="Design">ChartGeneration.ChartGenerationUI.Tests.Design</stat>
+<stat pass="1" fail="0" id="s1-s1-s1-s2-s1" name="DesignBarChartItems">ChartGeneration.ChartGenerationUI.Tests.Design.DesignBarChartItems</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

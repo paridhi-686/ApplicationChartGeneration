@@ -2,7 +2,9 @@
 
 Resource    ../../PageObjects/ChartGenerationResourceCollector.resource
 Library     Browser     
+Library    ScreenCapLibrary    
   
+
 *** Variables ***
 
 ${envVarURL}                   https://spark.adobe.com/express-apps/chart/
@@ -22,6 +24,7 @@ Verify modifications in chart when items added/deleted
     
     [Documentation]    Test covers deletion & addition of items & values
     ...     along with verification of pie chart.
+    [Setup]    Start Gif Recording
 
     Browser.New page    ${envVarURL}
     Log    === Delete all items ===
@@ -55,4 +58,4 @@ Verify modifications in chart when items added/deleted
 
     ChartLayoutPO.Verify Identical Color Count    2
     ChartLayoutPO.Verify Value Sum    60
-        
+    [Teardown]    Stop Gif Recording    

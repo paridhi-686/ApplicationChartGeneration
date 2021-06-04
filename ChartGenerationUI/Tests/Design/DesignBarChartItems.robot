@@ -2,7 +2,7 @@
 
 Resource    ../../PageObjects/ChartGenerationResourceCollector.resource
 Library     Browser      
-
+Library    ScreenCapLibrary    
   
 *** Variables ***
 ${envVarURL}                   https://spark.adobe.com/express-apps/chart/
@@ -21,6 +21,7 @@ ${localItem4}                  item4
 
 Verify Bar Chart View when items added
     
+    [Setup]    Start Gif Recording
     Browser.New page    ${envVarURL}
     Log    === Delete existing items ===
     SidePanelItemValuePO.Delete Item    ${localItemAnimlPurchse}    
@@ -55,3 +56,4 @@ Verify Bar Chart View when items added
     ChartLayoutPO.Verify Chart Contains Items    ${localItem2}
     ChartLayoutPO.Verify Chart Contains Items    ${localItem3}
     ChartLayoutPO.Verify Chart Contains Items    ${localItem4}
+    [Teardown]    Stop Gif Recording

@@ -3,6 +3,8 @@
     <configVersion>2</configVersion>
     <relativeTo>WORKSPACE</relativeTo>
     <referencedLibrary type="PYTHON" name="Browser" path="C:/Python/Lib/site-packages/Browser/__init__.py" dynamic="false"/>
+    <referencedLibrary type="PYTHON" name="ScreenCapLibrary" path="C:/Python/Lib/site-packages/ScreenCapLibrary/__init__.py" dynamic="false"/>
+    
     <pythonpath/>
     <classpath/>
     <excludedForValidation/>

@@ -1,21 +1,21 @@
-{"level":30,"time":"2021-06-03T21:25:43.586Z","pid":19280,"hostname":"DESKTOP-8QJ7VTT","msg":"Listening on 61772"}
-{"level":30,"time":"2021-06-03T21:25:44.089Z","pid":19280,"hostname":"DESKTOP-8QJ7VTT","msg":"currentBrowser: [object Object]"}
-{"level":30,"time":"2021-06-03T21:25:44.099Z","pid":19280,"hostname":"DESKTOP-8QJ7VTT","msg":"Changed active context"}
-{"level":30,"time":"2021-06-03T21:25:44.143Z","pid":19280,"hostname":"DESKTOP-8QJ7VTT","msg":"currentBrowser: [object Object]"}
-{"level":30,"time":"2021-06-03T21:25:44.413Z","pid":19280,"hostname":"DESKTOP-8QJ7VTT","msg":"Video path: undefined"}
-{"level":30,"time":"2021-06-03T21:25:44.413Z","pid":19280,"hostname":"DESKTOP-8QJ7VTT","msg":"Changed active page"}
-{"level":30,"time":"2021-06-03T21:25:48.161Z","pid":19280,"hostname":"DESKTOP-8QJ7VTT","msg":"Changed active context"}
-{"level":30,"time":"2021-06-03T21:25:48.162Z","pid":19280,"hostname":"DESKTOP-8QJ7VTT","msg":"Changing current active page"}
-{"level":30,"time":"2021-06-03T21:25:48.162Z","pid":19280,"hostname":"DESKTOP-8QJ7VTT","msg":"Changed active page"}
-{"level":30,"time":"2021-06-03T21:25:48.173Z","pid":19280,"hostname":"DESKTOP-8QJ7VTT","msg":"Changing current active page"}
-{"level":30,"time":"2021-06-03T21:25:48.174Z","pid":19280,"hostname":"DESKTOP-8QJ7VTT","msg":"Changed active page"}
-{"level":30,"time":"2021-06-03T21:25:48.384Z","pid":19280,"hostname":"DESKTOP-8QJ7VTT","msg":"currentBrowser: [object Object]"}
-{"level":30,"time":"2021-06-03T21:25:48.493Z","pid":19280,"hostname":"DESKTOP-8QJ7VTT","msg":"Video path: undefined"}
-{"level":30,"time":"2021-06-03T21:25:48.493Z","pid":19280,"hostname":"DESKTOP-8QJ7VTT","msg":"Changed active page"}
-{"level":30,"time":"2021-06-03T21:25:51.582Z","pid":19280,"hostname":"DESKTOP-8QJ7VTT","msg":"Changed active context"}
-{"level":30,"time":"2021-06-03T21:25:51.582Z","pid":19280,"hostname":"DESKTOP-8QJ7VTT","msg":"Changing current active page"}
-{"level":30,"time":"2021-06-03T21:25:51.582Z","pid":19280,"hostname":"DESKTOP-8QJ7VTT","msg":"Changed active page"}
-{"level":30,"time":"2021-06-03T21:25:51.587Z","pid":19280,"hostname":"DESKTOP-8QJ7VTT","msg":"Changing current active page"}
-{"level":30,"time":"2021-06-03T21:25:51.587Z","pid":19280,"hostname":"DESKTOP-8QJ7VTT","msg":"Changed active page"}
-{"level":30,"time":"2021-06-03T21:25:51.779Z","pid":19280,"hostname":"DESKTOP-8QJ7VTT","msg":"Changed active context"}
-{"level":30,"time":"2021-06-03T21:25:51.788Z","pid":19280,"hostname":"DESKTOP-8QJ7VTT","msg":"Changed active context"}
+{"level":30,"time":"2021-06-04T08:04:36.786Z","pid":6692,"hostname":"DESKTOP-8QJ7VTT","msg":"Listening on 65423"}
+{"level":30,"time":"2021-06-04T08:04:37.172Z","pid":6692,"hostname":"DESKTOP-8QJ7VTT","msg":"currentBrowser: [object Object]"}
+{"level":30,"time":"2021-06-04T08:04:37.180Z","pid":6692,"hostname":"DESKTOP-8QJ7VTT","msg":"Changed active context"}
+{"level":30,"time":"2021-06-04T08:04:37.500Z","pid":6692,"hostname":"DESKTOP-8QJ7VTT","msg":"currentBrowser: [object Object]"}
+{"level":30,"time":"2021-06-04T08:04:37.704Z","pid":6692,"hostname":"DESKTOP-8QJ7VTT","msg":"Video path: undefined"}
+{"level":30,"time":"2021-06-04T08:04:37.704Z","pid":6692,"hostname":"DESKTOP-8QJ7VTT","msg":"Changed active page"}
+{"level":30,"time":"2021-06-04T08:04:41.029Z","pid":6692,"hostname":"DESKTOP-8QJ7VTT","msg":"Changed active context"}
+{"level":30,"time":"2021-06-04T08:04:41.029Z","pid":6692,"hostname":"DESKTOP-8QJ7VTT","msg":"Changing current active page"}
+{"level":30,"time":"2021-06-04T08:04:41.029Z","pid":6692,"hostname":"DESKTOP-8QJ7VTT","msg":"Changed active page"}
+{"level":30,"time":"2021-06-04T08:04:41.038Z","pid":6692,"hostname":"DESKTOP-8QJ7VTT","msg":"Changing current active page"}
+{"level":30,"time":"2021-06-04T08:04:41.038Z","pid":6692,"hostname":"DESKTOP-8QJ7VTT","msg":"Changed active page"}
+{"level":30,"time":"2021-06-04T08:04:41.239Z","pid":6692,"hostname":"DESKTOP-8QJ7VTT","msg":"currentBrowser: [object Object]"}
+{"level":30,"time":"2021-06-04T08:04:41.384Z","pid":6692,"hostname":"DESKTOP-8QJ7VTT","msg":"Video path: undefined"}
+{"level":30,"time":"2021-06-04T08:04:41.384Z","pid":6692,"hostname":"DESKTOP-8QJ7VTT","msg":"Changed active page"}
+{"level":30,"time":"2021-06-04T08:04:44.869Z","pid":6692,"hostname":"DESKTOP-8QJ7VTT","msg":"Changed active context"}
+{"level":30,"time":"2021-06-04T08:04:44.869Z","pid":6692,"hostname":"DESKTOP-8QJ7VTT","msg":"Changing current active page"}
+{"level":30,"time":"2021-06-04T08:04:44.869Z","pid":6692,"hostname":"DESKTOP-8QJ7VTT","msg":"Changed active page"}
+{"level":30,"time":"2021-06-04T08:04:44.874Z","pid":6692,"hostname":"DESKTOP-8QJ7VTT","msg":"Changing current active page"}
+{"level":30,"time":"2021-06-04T08:04:44.874Z","pid":6692,"hostname":"DESKTOP-8QJ7VTT","msg":"Changed active page"}
+{"level":30,"time":"2021-06-04T08:04:45.074Z","pid":6692,"hostname":"DESKTOP-8QJ7VTT","msg":"Changed active context"}
+{"level":30,"time":"2021-06-04T08:04:45.084Z","pid":6692,"hostname":"DESKTOP-8QJ7VTT","msg":"Changed active context"}
